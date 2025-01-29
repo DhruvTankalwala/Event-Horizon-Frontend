@@ -11,6 +11,10 @@ import { GradientBackground } from "./GradientBackground/GradientBackground";
 import ClubsComponent from "./Club/Clubs";
 import { Input } from "./Verification/Input";
 import { Button } from "./Verification/Button";
+import { EventCard } from "./Event/components/EventCard";
+import EventsComponent from "./Event/Events";
+import AuthRoute from "../routes/ProtectedRoutes";
+import ClubDetailsComponent from "../components/Club/components/ClubDetails";
 export {
     Navbar ,
     Footer ,
@@ -24,5 +28,9 @@ export {
     GradientBackground,
     ClubsComponent,
     Input,
-    Button
+    Button,
+    EventCard,
+    EventsComponent,
+    AuthRoute,
+    ClubDetailsComponent
 }

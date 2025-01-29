@@ -2,8 +2,9 @@ import { motion } from "framer-motion"
 import { Users, Mail } from "lucide-react"
 import { Link } from "react-router-dom"
 
-export function ClubCard({ name, members, description, email, logoUrl, id }) {
+export function ClubCard({ name, members, description, email, logoUrl, clubId }) {
   return (
+    <Link to={`/clubs/${club.clubId}`}>
     <motion.div
       className="bg-gradient-to-br from-teal-900 to-blue-900 rounded-lg overflow-hidden shadow-lg transform perspective-1000"
       whileHover={{
@@ -34,7 +35,7 @@ export function ClubCard({ name, members, description, email, logoUrl, id }) {
         <div className="px-6 py-4">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
-              to={`/club/${id}`}
+              to={`/club/${clubId}`}
               className="block w-full py-2 px-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-md shadow-md hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-opacity-75 transition-all duration-300 text-center"
             >
               View Club
@@ -43,6 +44,7 @@ export function ClubCard({ name, members, description, email, logoUrl, id }) {
         </div>
       </div>
     </motion.div>
+    </Link>
   )
 }
 

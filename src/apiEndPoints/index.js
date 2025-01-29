@@ -60,3 +60,41 @@ export const getAllClubs =  async()=>{
         return error.response.data
     }
 }
+
+export const getAllEvents =  async()=>{
+    try {
+        const res = await myAxios.get('/events');
+        console.log(res);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const isAuthenticatedUser = async()=>{
+    try {
+        const res = await myAxios.get('/isAuthenticated');
+        console.log(res);
+        return res.data;
+        
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const registerForEvent = async(eventId,values)=>{
+    try {
+        const res =  await myAxios.post(`/events/registrations/${parseInt(eventId)}`,values);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+export const getClubDetailsApi = async(clubId)=>{
+    try {
+        const res = await myAxios.get(`/clubs/${clubId}`);
+        return res.data
+    } catch (error) {
+        return error.response.data;
+    }
+}

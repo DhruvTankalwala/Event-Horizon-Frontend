@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react"
 const navItems = [
   { name: "Events", to: "/events" },
   { name: "Clubs", to: "/clubs" },
-  { name: "My Clubs", to: "/my-clubs" },
   { name: "Registered Events", to: "/registered-events" },
   { name: "Polls", to: "/polls" },
 ]
