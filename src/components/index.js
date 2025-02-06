@@ -15,6 +15,11 @@ import { EventCard } from "./Event/components/EventCard";
 import EventsComponent from "./Event/Events";
 import AuthRoute from "../routes/ProtectedRoutes";
 import ClubDetailsComponent from "../components/Club/components/ClubDetails";
+import EventDetailsComponent from "./Event/components/EventDetailsComponent";
+import { EventRegistrationForm } from "./Event/components/EventRegistrationForm";
+import EventRegistrationsComponent from "./EventRegistrations/EventRegistrationsComponent";
+import { cn } from "./ClassMerger";
+import TextArea from "./Event/components/TextArea";
 export {
     Navbar ,
     Footer ,
@@ -32,5 +37,10 @@ export {
     EventCard,
     EventsComponent,
     AuthRoute,
-    ClubDetailsComponent
+    ClubDetailsComponent,
+    EventDetailsComponent,
+    EventRegistrationsComponent,
+    cn,
+    TextArea,
+    EventRegistrationForm
 }

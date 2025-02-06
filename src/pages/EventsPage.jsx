@@ -3,7 +3,11 @@ import { EventsComponent, Footer, Navbar , GradientBackground } from '../compone
 
 const EventsPage = () => {
   return (
+    <GradientBackground >
+        <Navbar />
         <EventsComponent />
+        <Footer />
+    </GradientBackground>
   )
 }
 

@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
-import { ClubDetailsComponent } from '../components/index'
+import { ClubDetailsComponent, Footer, GradientBackground , Navbar } from '../components/index'
 const ClubDetails = () => {
 
   return (
-    <div>
+    <GradientBackground>
+        <Navbar />
         <ClubDetailsComponent />
-    </div>
+        <Footer />
+    </GradientBackground>
   )
 }
 

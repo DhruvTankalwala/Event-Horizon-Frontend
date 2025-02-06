@@ -27,7 +27,6 @@ export default function ClubsComponent() {
       }
     }
     getAllClubDetails()
-      
   }, [])
 
   const filteredClubs = clubsData.filter(
@@ -37,11 +36,8 @@ export default function ClubsComponent() {
   )
 
   return (
-    
-      <div className="min-h-screen flex flex-col ">
-        {isLoading && <Loader />}
-        <GradientBackground>
-        <Navbar />
+    <div className="min-h-screen flex flex-col ">
+      {isLoading && <Loader />}
         <main className="flex-grow container mx-auto px-4 py-8">
           <motion.h1
             className="text-4xl md:text-5xl font-bold text-center text-white mb-8"
@@ -134,9 +130,8 @@ export default function ClubsComponent() {
             </AnimatePresence>
           </motion.div>
         </main>
-        </GradientBackground>
-        <Footer />
       </div>
+    
       
   )
 }

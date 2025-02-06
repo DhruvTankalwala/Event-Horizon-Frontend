@@ -1,9 +1,13 @@
 import React from 'react'
-import { ClubsComponent } from '../components'
+import { ClubsComponent, Footer, GradientBackground, Navbar } from '../components'
 
 function ClubsPage() {
   return (
-    <ClubsComponent />
+    <GradientBackground>
+      <Navbar />
+      <ClubsComponent />
+      <Footer />
+    </GradientBackground>
   )
 }
 

@@ -9,7 +9,8 @@ import EventsPage from './pages/EventsPage'
 import { myAxios } from './utils/user-service'
 import { AuthRoute } from './components'
 import ClubDetails from './pages/ClubDetails'
-
+import EventDetailsPage from './pages/EventDetails'
+import EventRegistrationsPage from './pages/EventRegistrationsPage'
 function App() {
   const navigate = useNavigate()
   useEffect(()=>{
@@ -19,12 +20,11 @@ function App() {
     }
     myAxios.defaults.headers.common['authorization'] = token;
     console.log(token);
-    navigate('/clubs')
   },[])
   return (
     <>
     <Routes>
-      <Route path='/' element = {<AuthPage />} />
+      <Route path='/' element = {<EventsPage />} />
       <Route path='/auth' element = {<AuthPage />} />
       <Route path='/verify' element={< VerificationPendingPage/>} />
       <Route 
@@ -41,6 +41,13 @@ function App() {
                 <ClubsPage/>
             </AuthRoute>
         } />
+        <Route
+      path='/clubs/:clubId'
+      element={
+         <AuthRoute>
+           <ClubDetails />
+         </AuthRoute>
+       }/>
       <Route
          path='/events' 
          element={
@@ -48,13 +55,21 @@ function App() {
               < EventsPage />
           </AuthRoute>
           }/>
-           <Route
-         path='/clubs/:clubId'
+          <Route
+         path='/events/:eventId'
          element={
             <AuthRoute>
-              <ClubDetails />
+              <EventDetailsPage />
             </AuthRoute>
           }/>
+          <Route
+         path='/manage-registrations'
+         element={
+            <AuthRoute>
+              <EventRegistrationsPage />
+            </AuthRoute>
+          }/>
+           
     </Routes>
     <Toaster />
     </>  

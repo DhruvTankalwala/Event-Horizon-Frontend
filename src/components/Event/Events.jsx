@@ -1,35 +1,36 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Calendar, Clock, MapPin, Search } from "lucide-react"
-import {Navbar,Footer, Loader, GradientBackground} from "../index"
+import { Calendar, Clock, MapPin, Search ,Plus } from "lucide-react"
+import {Navbar,Footer, Loader, GradientBackground, EventCard , Button} from "../index"
 import { getAllEvents } from "../../apiEndPoints"
 import toast from "react-hot-toast"
 import { EventRegistrationForm } from "./components/EventRegistrationForm"
+import { CreateEventForm } from "./components/CreateEventForm"
 
 // User accept thaye pachi aj count vadhvo joiye
 
 export default function EventsComponent() {
+  const[loading,setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("ONGOING")
   const [events, setEvents] = useState([])
-  const [selectedEvent , setSelectedEvent] = useState(null);
-  const [registrations , setRegistrations] = useState(null);
-  
-  const[loading,setLoading] = useState(false)
+  const [modifiedEvent , setModifiedEvent] = useState(false);
+  const [isCreateFormOpen , setIsCreateFormOpen] = useState(null);
+
   useEffect(()=>{
        const fetchAllEvents = async()=>{
             setLoading(true)
             const res = await getAllEvents();
             setLoading(false)
             if(res.statusCode==200){
-                toast.success(res.message)
+                
                 setEvents(res.data);
             }else{
                 toast.error(res.message)
             }
         }
         fetchAllEvents();
-  },[])
+  },[modifiedEvent])
   const filteredEvents = events.filter(
     (event) =>
       (event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,23 +48,25 @@ export default function EventsComponent() {
     return <Loader />
   }
   return (
-    
-    <div className="min-h-screen flex flex-col bg-[#0F0F1A]">
-      <Navbar />
+    <div className="min-h-screen flex flex-col">
       <main className="flex-grow container mx-auto px-4 py-8">
         <motion.h1
+          layout
           className="text-4xl md:text-5xl font-bold text-center text-white mb-8"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
           Explore Events
         </motion.h1>
+  
+        {/* Search Bar */}
         <motion.div
+          layout
           className="mb-8 relative"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
         >
           <input
             type="text"
@@ -74,17 +77,20 @@ export default function EventsComponent() {
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" />
         </motion.div>
+  
+        {/* Tabs */}
         <motion.div
+          layout
           className="flex justify-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
         >
           {eventStatus.map((tab) => (
             <motion.button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 mx-2 rounded-full text-sm font-medium`}
+              className={`px-4 py-2 mx-2 rounded-full text-sm font-medium hover:cursor-pointer`}
               variants={tabVariants}
               animate={activeTab === tab ? "active" : "inactive"}
               whileHover={{ scale: 1.05 }}
@@ -94,87 +100,42 @@ export default function EventsComponent() {
             </motion.button>
           ))}
         </motion.div>
-        <AnimatePresence mode="wait">
+  
+        {/* Create Event Button */}
+        <div className="flex justify-end mb-4">
+          <Button
+            onClick={() => setIsCreateFormOpen(true)}
+            className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white px-3 py-2 hover:cursor-pointer"
+          >
+            <Plus size={16} className="mr-2" /> Create Event
+          </Button>
+        </div>
+  
+        {/* Event List with Smooth Transitions */}
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={activeTab}
+            layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredEvents.map((event) => (
-              <motion.div
-                key={event.id}
-                className="bg-gray-900 rounded-lg overflow-hidden shadow-lg"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="relative">
-                  <img
-                    src={event.imageUrl || "/placeholder.svg"}
-                    alt={event.title}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute top-0 right-0 bg-purple-500 text-white px-2 py-1 m-2 rounded-md text-sm">
-                    {event.status}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold text-white mb-2">{event.title}</h2>
-                  <p className="text-gray-400 mb-4">{event.description}</p>
-                  <div className="flex items-center text-gray-500 mb-2">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>{event.date}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500 mb-2">
-                    <Clock className="w-4 h-4 mr-2" />
-                    <span>{event.startTime} - {event.endTime}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span>{event.location}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500 mb-2">
-                    <span className="font-medium">Organizing Club : </span> <span>{event.clubName}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500">
-                    <span className="font-medium">Registrations:</span>{" "}
-                    <span>
-                      {event.completedRegistrations}/{event.totalRegistrations}
-                    </span>
-                  </div>
-                </div>
-                <div className="px-6 py-4">
-                  <motion.button
-                    className="w-full py-2 px-4 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-md shadow-md hover:from-purple-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition-all duration-300"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setSelectedEvent(event);
-                      setRegistrations(event.completedRegistrations);
-                    }}
-                  >
-                    {event.status === "PAST" ? "View Details" : event.registered == false ? "Register Now" : "Registered" }
-                  </motion.button>
-                </div>
-              </motion.div>
+              <EventCard key={event.id} eventDetails={event} modifyEvent={setModifiedEvent} />
             ))}
           </motion.div>
         </AnimatePresence>
       </main>
-      <Footer />
-      <AnimatePresence >
-      {selectedEvent && (
-          <EventRegistrationForm setRegistrations={setRegistrations} eventId={selectedEvent.id} eventName={selectedEvent.title} onClose={() => setSelectedEvent(null)} />
+  
+      {/* Create Event Modal */}
+      <AnimatePresence>
+        {isCreateFormOpen && (
+          <CreateEventForm onClose={() => setIsCreateFormOpen(false)} modifyEvent={setModifiedEvent} />
         )}
-    </AnimatePresence>
+      </AnimatePresence>
     </div>
-    
-
-  )
+  );  
 }
 

@@ -8,6 +8,7 @@ const navItems = [
   { name: "Clubs", to: "/clubs" },
   { name: "Registered Events", to: "/registered-events" },
   { name: "Polls", to: "/polls" },
+  { name : "Manage-Registratins" ,to: "/manage-registrations"}
 ]
 
 export function Navbar() {

@@ -98,3 +98,87 @@ export const getClubDetailsApi = async(clubId)=>{
         return error.response.data;
     }
 }
+
+export const getAllPolls= async ()=>{
+
+}
+
+export const getAllRegistrations = async()=>{
+    try {
+        const res = await myAxios.get(`/clubs/${clubId}`);
+        return res.data
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const getEventDetailsApi = async(id)=>{
+    try {
+        const res = await myAxios.get(`/events/${id}`)
+        console.log(res.data);
+        return res.data ;
+
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const eventRegistrationsApi = async()=>{
+    try {
+        const res = await myAxios.get(`/clubs/pending-registrations`)
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const acceptEventRegistrationsApi = async(registrationId)=>{
+    try {
+        const res = await myAxios.get(`/events/registrations/${registrationId}/approve`)
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const rejectEventRegistrationsApi = async(registrationId)=>{
+    try {
+        const res = await myAxios.get(`/events/registrations/${registrationId}/reject`)
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const createEvent = async(values)=>{
+    try {
+        const res = await myAxios.post(`/events` , values);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const deleteEventApi = async(eventId)=>{
+    try {
+        const res = await myAxios.delete(`/events/${eventId}`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const updateEventApi = async(event)=>{
+    try {
+        const res = await myAxios.patch(`/events` ,event);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}

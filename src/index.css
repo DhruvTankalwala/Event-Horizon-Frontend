@@ -63,3 +63,9 @@
   }
   
   
+
+  input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Makes the icon white on dark backgrounds */
+  cursor: pointer;
+}
