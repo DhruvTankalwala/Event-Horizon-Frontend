@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import { cn } from "../ClassMerger";
 
 export const Button = forwardRef(function Button(
   { className, variant = "default", ...props },
@@ -11,9 +12,11 @@ export const Button = forwardRef(function Button(
     default: "bg-gradient-to-r from-purple-500 to-cyan-500 text-white hover:from-purple-600 hover:to-cyan-600",
     secondary: "bg-gray-800 text-white hover:bg-gray-700",
     outline: "border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white",
+    green: "bg-green-500 text-white hover:bg-green-600",
+    red: "bg-red-500 text-white hover:bg-red-600",
   };
 
-  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${className || ""}`;
-
-  return <button className={combinedClassName} ref={ref} {...props} />;
+  return (
+    <button className={cn(baseStyles, variantStyles[variant], className)} ref={ref} {...props} />
+  );
 });

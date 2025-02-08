@@ -182,3 +182,43 @@ export const updateEventApi = async(event)=>{
         return error.response.data;
     }
 }
+
+export const registerClubApi = async(values)=>{
+    try {
+        const res = await myAxios.post("/clubs/register",values);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+
+export const getAllClubsRegistrationsApi = async()=>{
+    try {
+        const res = await myAxios.get(`/admin/club-request`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const acceptClubRegistrationApi = async(id)=>{
+    try {
+        const res = await myAxios.get(`/admin/club-request/${id}/approve`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const rejectClubRegistrationApi = async(id)=>{
+    try {
+        const res = await myAxios.get(`/admin/club-request/${id}/reject`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}

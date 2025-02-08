@@ -20,6 +20,8 @@ import { EventRegistrationForm } from "./Event/components/EventRegistrationForm"
 import EventRegistrationsComponent from "./EventRegistrations/EventRegistrationsComponent";
 import { cn } from "./ClassMerger";
 import TextArea from "./Event/components/TextArea";
+import ClubRegistrationForm from "./Club/components/ClubRegistrationForm";
+import ManageClubRegistrations from "./Club/components/ManageClubRegistrations";
 export {
     Navbar ,
     Footer ,
@@ -42,5 +44,7 @@ export {
     EventRegistrationsComponent,
     cn,
     TextArea,
-    EventRegistrationForm
+    EventRegistrationForm,
+    ClubRegistrationForm,
+    ManageClubRegistrations
 }

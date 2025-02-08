@@ -11,6 +11,7 @@ import { AuthRoute } from './components'
 import ClubDetails from './pages/ClubDetails'
 import EventDetailsPage from './pages/EventDetails'
 import EventRegistrationsPage from './pages/EventRegistrationsPage'
+import ManageClubRegistrationsPage from './pages/ManageClubRegistrationsPage'
 function App() {
   const navigate = useNavigate()
   useEffect(()=>{
@@ -67,6 +68,14 @@ function App() {
          element={
             <AuthRoute>
               <EventRegistrationsPage />
+            </AuthRoute>
+          }/>
+
+        <Route
+         path='/manage-club-registrations'
+         element={
+            <AuthRoute>
+              <ManageClubRegistrationsPage />
             </AuthRoute>
           }/>
            

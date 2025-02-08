@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import {Navbar , Footer , Loader, GradientBackground} from '../index'
+import {Navbar , Footer , Loader, GradientBackground , Button, ClubRegistrationForm} from '../index'
 import { Users, Mail, Search } from "lucide-react"
 import { getAllClubs } from "../../apiEndPoints"
 import toast from "react-hot-toast"
@@ -11,8 +11,9 @@ export default function ClubsComponent() {
   const [searchTerm, setSearchTerm] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [clubsData, setClubsData] = useState([])
-  useEffect(() => {
-    
+  const[isClubRegistrationOpen,setIsClubRegistrationOpen] = useState(false);
+
+  useEffect(() => {  
     const getAllClubDetails = async()=>{
       setIsLoading(true);
       const res = await getAllClubs();
@@ -62,6 +63,14 @@ export default function ClubsComponent() {
             />
             <Search className="absolute left-3 top-2.5 text-gray-400" />
           </motion.div>
+          <div className="flex justify-center mb-8">
+            <Button
+              onClick={() => setIsClubRegistrationOpen(true)}
+              className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold py-2 px-6 rounded-full hover:from-purple-600 hover:to-cyan-600 transition-all duration-300"
+            >
+              Register as a Club
+            </Button>
+          </div>
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             initial="hidden"
@@ -76,7 +85,10 @@ export default function ClubsComponent() {
               },
             }}
           >
+            
+
             <AnimatePresence>
+
               {filteredClubs.map((club) => (
                 
                 <motion.div
@@ -130,6 +142,7 @@ export default function ClubsComponent() {
             </AnimatePresence>
           </motion.div>
         </main>
+        {isClubRegistrationOpen && <ClubRegistrationForm onClose={()=> setIsClubRegistrationOpen(false) } /> }
       </div>
     
       
