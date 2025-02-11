@@ -13,7 +13,6 @@ const EventDetailsComponent = () => {
     const [isOpen , setIsOpen]  = useState(false)
     useEffect(()=>{
         const fetchEventDetails = async()=> {
-
         setLoading(true);
         const res = await getEventDetailsApi(eventId);
         setLoading(false)

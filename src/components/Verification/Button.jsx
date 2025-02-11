@@ -14,6 +14,11 @@ export const Button = forwardRef(function Button(
     outline: "border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white",
     green: "bg-green-500 text-white hover:bg-green-600",
     red: "bg-red-500 text-white hover:bg-red-600",
+    destructive: "bg-red-500 text-destructive-foreground hover:bg-red-600",
+    ghost: "hover:bg-accent hover:text-accent-foreground",
+    link: "underline-offset-4 hover:underline text-primary",
+    edit: "bg-blue-500 text-white hover:bg-blue-600",
+
   };
 
   return (

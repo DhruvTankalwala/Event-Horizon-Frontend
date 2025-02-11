@@ -1,20 +1,32 @@
 import ReactDOM from "react-dom"
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2 } from "lucide-react";
-import { deleteEventApi } from "../../../apiEndPoints";
+import { deleteClubApi, deleteEventApi } from "../../../apiEndPoints";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+export function DeleteConfirmationModal({  onClose ,eventId , clubId ,modify }) {
+  const navigate = useNavigate();
 
-export function DeleteConfirmationModal({  onClose ,eventId , modifyEvent }) {
-  
   const handleDelete = async()=>{
     console.log(eventId);
-    const res = await deleteEventApi(eventId);
-    if(res.statusCode == 204){
+    let res;
+    if(eventId){
+      res = await deleteEventApi(eventId);
+    }else{
+      res = await deleteClubApi(clubId)
+    }
+    if(res.statusCode == 200){
       toast.success(res.message)
-      modifyEvent((prev)=>!prev)
+      if(clubId){
+        localStorage.removeItem("authToken")
+        delete myAxios.defaults.headers.common["Authorization"];
+        navigate("/auth")
+      }else{
+        modify((prev)=>!prev) // For event delete from the card to again call the api
+      }
     }else{
       toast.error(res.message)
-    }
+    } 
     onClose();
   }
 
@@ -40,7 +52,7 @@ export function DeleteConfirmationModal({  onClose ,eventId , modifyEvent }) {
             </button>
             <Trash2 className="text-red-500 mx-auto mb-4" size={40} />
             <h2 className="text-xl font-bold text-white mb-2">Are you sure?</h2>
-            <p className="text-gray-300 mb-6">Do you really want to delete this event? This action cannot be undone.</p>
+            <p className="text-gray-300 mb-6">Do you really want to delete this {clubId? "club" : "event"} ? This action cannot be undone.</p>
             <div className="flex flex-col gap-3">
               <motion.button 
                 onClick={handleDelete} 

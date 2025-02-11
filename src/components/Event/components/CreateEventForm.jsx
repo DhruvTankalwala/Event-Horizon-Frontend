@@ -1,9 +1,9 @@
-import React, { useState , useEffect } from "react";
+import React, { useState , useEffect, useRef } from "react";
 import ReactDOM from "react-dom"
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
-import { X, Plus, Trash } from "lucide-react";
+import { X, Plus, Trash , Upload } from "lucide-react";
 import { Input, TextArea, Button, Loader } from "../../index";
 import { createEvent, updateEventApi } from "../../../apiEndPoints";
 import toast from "react-hot-toast";
@@ -15,6 +15,10 @@ const validationSchema = Yup.object({
   startTime: Yup.string().required("Start Time is required"),
   endTime: Yup.string().required("End Time is required"),
   location: Yup.string().required("Location is required"),
+  totalRegistrations : Yup.string().required("Total registrations is required"),
+  imageUrl : Yup.mixed()
+                  .required("Club Icon is required is required")
+                  ,
   speakers: Yup.array().of(
     Yup.object().shape({
       name: Yup.string().required("Speaker name is required"),
@@ -31,10 +35,14 @@ const validationSchema = Yup.object({
     endTime: "",
     location: "",
     status : "",
-    totalRegistrations: undefined, 
+    imageUrl : undefined ,
+    totalRegistrations: "", 
     speakers: [],
   }
-export function CreateEventForm({ onClose , event , modifyEvent  }) {
+export function CreateEventForm({ onClose , event  , modifyEvent  }) {
+
+  const [imagePreview , setImagePreview] = useState(null);
+
   const formik = useFormik({
     initialValues : event || initialValues,
     validationSchema,
@@ -42,14 +50,15 @@ export function CreateEventForm({ onClose , event , modifyEvent  }) {
       console.log(values);
       let res;
       if(event!=null){
+        
          res = await updateEventApi(values);
         
       }else{  
+        console.log("Values",values);
         res = await createEvent(values);
       }
       console.log(res);
       if(res.statusCode >= 200 && res.statusCode < 300){
-          console.log("Hiii");
           toast.success(res.message)
           modifyEvent((prev)=>!prev)
            onClose();
@@ -58,13 +67,16 @@ export function CreateEventForm({ onClose , event , modifyEvent  }) {
       }
     },
   });
+  console.log("event:",event);
+  
+  const imageRef = useRef(null);
 
   const addSpeaker = () => {
     formik.setFieldValue("speakers", [...formik.values.speakers, { name: "", position: "", company: "" }]);
   };
 
   const removeSpeaker = (index) => {
-    const updatedSpeakers = formik.values.speakers.filter((_, i) => i !== index);
+    const updatedSpeakers = formik.values.speakers.filter((_,i) => i !== index);
     formik.setFieldValue("speakers", updatedSpeakers);
   };
 
@@ -137,13 +149,51 @@ export function CreateEventForm({ onClose , event , modifyEvent  }) {
 
           }
 
+            <label htmlFor="imageUrl">Club Icon</label>
+            <div className="flex items-center space-x-2 w-full" >
+            <input 
+            id = "imageUrl"
+            type = "file" 
+            name = "imageUrl"
+            onChange={(e)=>{
+              const file = e.target.files[0]
+              formik.setFieldValue("imageUrl" , file)
+              if(file){
+                setImagePreview(URL.createObjectURL(file))
+              }else{
+                setImagePreview(null)
+              }
+            }}
+            ref={imageRef}
+            accept="image/*,.jpg,.jpeg,.png,.gif , .bmp , webp"
+            className="hidden"
+            error = {formik.errors.imageUrl}
+            touched = {formik.touched.imageUrl}
+          />
+          <Button 
+            type = "button"
+            className="border-white px-4 py-3 text-lg text-white  hover:cursor-pointer w-full"
+            onClick={()=>imageRef.current.click()}
+            variant="secondary"
+          >
+                <Upload className="mr-2 h-4 w-4" /> Upload Icon
+          </Button>
+            {(formik.values.imageUrl || event?.imageUrl ) && (
+                <img className="max-h-20" src={imagePreview || event?.imageUrl } />
+              )}
+            </div>
+            {
+              formik.touched.imageUrl && formik.errors.imageUrl &&
+              <div className="text-red-500 text-sm mt-2" >{formik.errors.imageUrl} </div>
+            }
+          
           <Input 
             name="totalRegistrations" 
-            placeholder="Total registrations" 
-            {...formik.getFieldProps("totalRegistrations")} 
-            className="w-full bg-gray-800 text-white" 
-            error={formik.errors.title} 
-            touched={formik.touched.title} 
+            placeholder="Total registrations"
+            {...formik.getFieldProps("totalRegistrations")}
+            className="w-full bg-gray-800 text-white"
+            error={formik.errors.title}
+            touched={formik.touched.title}
           />
           <Input 
             name="location" 
@@ -157,19 +207,19 @@ export function CreateEventForm({ onClose , event , modifyEvent  }) {
             <label className="block text-sm font-medium text-gray-300 mb-1">Speakers</label>
             {formik.values.speakers?.map((speaker, index) => (
               <div key={index} className="flex gap-2 mb-2">
-                <Input placeholder="Name" {...formik.getFieldProps(`speakers[${index}].name`)} className="flex-1 bg-gray-800 text-white" />
-                <Input placeholder="Position" {...formik.getFieldProps(`speakers[${index}].position`)} className="flex-1 bg-gray-800 text-white" />
-                <Input placeholder="Company" {...formik.getFieldProps(`speakers[${index}].company`)} className="flex-1 bg-gray-800 text-white" />
-                <button className="hover:cursor-pointer" type="button" onClick={() => removeSpeaker(index)}>
-                  <Trash size={16} />
-                </button>               
+                <Input placeholder="Name" error={formik.errors.speakers?.[index]?.name} touched={formik.touched.speakers?.[index]?.name} {...formik.getFieldProps(`speakers[${index}].name`)} className="flex-1 bg-gray-800 text-white" />
+                <Input placeholder="Position" error={formik.errors.speakers?.[index]?.position} touched={formik.touched.speakers?.[index]?.position} {...formik.getFieldProps(`speakers[${index}].name`)} {...formik.getFieldProps(`speakers[${index}].position`)} className="flex-1 bg-gray-800 text-white" />
+                <Input placeholder="Company" error={formik.errors.speakers?.[index]?.company} touched={formik.touched.speakers?.[index]?.company} {...formik.getFieldProps(`speakers[${index}].name`)} {...formik.getFieldProps(`speakers[${index}].company`)} className="flex-1 bg-gray-800 text-white" />
+                <button className="hover:cursor-pointer" type="button"  onClick={() => removeSpeaker(index)}>
+                  <Trash size={20} />
+                </button>
               </div>
             ))}
-            <Button type="button" onClick={addSpeaker} className="px-4 py-3 text-lg flex items-center gap-2 bg-gray-800 text-white rounded-lg hover:cursor-pointer">
+            <Button type="button" onClick={addSpeaker} variant = "secondary" className="px-4 py-3 text-lg  hover:cursor-pointer">
               <Plus size={20} /> Add Speaker
             </Button>
           </div>
-          <Button type="submit" className="w-full px-4 py-3 text-lg bg-gradient-to-r from-purple-500 to-cyan-500 text-white rounded-lg hover:cursor-pointer">
+          <Button type="submit" className="w-full px-4 py-3 text-lg  text-white rounded-lg hover:cursor-pointer">
            {event ? " Update Event" :  "Create Event" }
           </Button>
         </form>

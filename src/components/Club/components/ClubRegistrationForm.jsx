@@ -1,10 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef , useState } from 'react'
 import { X, Upload } from "lucide-react"
 import { motion } from 'framer-motion'
 import { Button , Input ,TextArea } from "../../../components/index"
 import { useFormik } from 'formik'
 import * as yup from "yup"
-import { registerClubApi } from '../../../apiEndPoints'
+import { registerClubApi, updateClubDetailsApi } from '../../../apiEndPoints'
+import { useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 const validationSchema  = yup.object({
   name : yup
@@ -15,36 +16,38 @@ const validationSchema  = yup.object({
                 .string()
                 .required("Club description is required"),
 
-  // icon:         yup.mixed()
-  //               .required("File is required")
-  //               .test("fileSize", "File is too large (max 2MB)", (value) =>
-  //                 value ? value.size <= 2 * 1024 * 1024 : true
-  //               )
-  //               .test("fileType", "Only image files are allowed", (value) =>
-  //                 value ? ["image/jpeg", "image/png", "image/gif"].includes(value.type) : true
-  //               ),
+  icon:         yup.mixed()
+                .required("File is required")
 }
 )
 
 const initialValues = {
     name : "" , 
     description : "",
-    // icon : undefined
+    icon : undefined
 }
 
 
 
 
-const ClubRegistrationForm = ({onClose}) => {
-
+const ClubRegistrationForm = ({onClose , club }) => {
+   const {clubId} = useParams()
+  const [iconPreview , setIconPreview] = useState(null);
   const formik = useFormik({
-    initialValues ,
+    initialValues : club || initialValues ,
     validationSchema,
     onSubmit :async(values)=>{
         console.log(values);
-        const res = await registerClubApi(values)
+        let res;
+        if(!club){
+          res = await registerClubApi(values)
+        }else{
+            res = await updateClubDetailsApi(values,clubId)
+        }
+        
         if(res.statusCode>=200 && res.statusCode <300){
           toast.success(res.message)
+          onClose()  
         } else{
           toast.error(res.message)
         }
@@ -53,7 +56,12 @@ const ClubRegistrationForm = ({onClose}) => {
 
   const handleFileChange = (e)=>{
     const file = e.currentTarget.files[0];
-    formik.setFieldValue("icon", file);
+    if(file){
+      formik.setFieldValue("icon", file);
+      setIconPreview(URL.createObjectURL(file))
+    }else{
+      setIconPreview(null)
+    }
   }
 
 const iconRef = useRef(null);
@@ -101,7 +109,7 @@ const iconRef = useRef(null);
             />
           </div>
 
-          {/* <div>
+          <div>
             <label htmlFor="icon">Club Icon</label>
             <div className="flex items-center space-x-2 w-full">
               <input
@@ -123,50 +131,21 @@ const iconRef = useRef(null);
               >
                 <Upload className="mr-2 h-4 w-4" /> Upload Icon
               </Button>
-              {console.log(formik.values)
+              {
+                (formik.values.icon || club?.icon) && <img className='max-h-20' src={iconPreview || club?.icon} alt={club?.name} />
               }
-              {formik.values.icon && (
-                <span className="text-xs sm:text-sm text-gray-400 truncate max-w-[100px] sm:max-w-[150px]">
-                  {formik.values.icon.name}
-                </span>
-              )}
-               
             </div>
             {formik.errors.icon && formik.touched.icon && (
                 <p className="text-red-500 text-xs mt-1">{formik.errors.icon}</p>
-              )}
-          </div> */}
-
-          {/* <div>
-            <label htmlFor="poster">Club Poster</label>
-            <div className="flex items-center space-x-2">
-              <Input
-                id="poster"
-                type="file"
-                onChange={handlePosterChange}
-                accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.webp"
-                className="hidden"
-              />
-              <Button
-                type="button"
-                onClick={() => document.getElementById("poster")?.click()}
-                className="w-full py-2 px-4 text-sm sm:text-base bg-gray-800 hover:bg-gray-700"
-              >
-                <Upload className="mr-2 h-4 w-4" /> Upload Poster
-              </Button>
-              {poster && (
-                <span className="text-xs sm:text-sm text-gray-400 truncate max-w-[100px] sm:max-w-[150px]">
-                  {poster.name}
-                </span>
-              )}
-            </div>
-          </div> */}
+            )}
+          </div>
 
           <Button
             type="submit"
             className="w-full py-2 px-4 text-sm sm:text-base bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold"
           >
-            Register Club
+            {club ? "Update Club" : "Register Club" }
+            
           </Button>
         </form>
       </motion.div>

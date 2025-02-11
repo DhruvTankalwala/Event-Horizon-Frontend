@@ -22,6 +22,9 @@ import { cn } from "./ClassMerger";
 import TextArea from "./Event/components/TextArea";
 import ClubRegistrationForm from "./Club/components/ClubRegistrationForm";
 import ManageClubRegistrations from "./Club/components/ManageClubRegistrations";
+import { DeleteConfirmationModal } from "./Event/components/DeleteConfirmationModal";
+import AddMembersForm from "./Club/components/AddMembersForm";
+import MemberCard from "./Club/components/MemberCard"
 export {
     Navbar ,
     Footer ,
@@ -46,5 +49,8 @@ export {
     TextArea,
     EventRegistrationForm,
     ClubRegistrationForm,
-    ManageClubRegistrations
+    ManageClubRegistrations,
+    DeleteConfirmationModal,
+    AddMembersForm,
+    MemberCard
 }

@@ -6,8 +6,6 @@ import { acceptClubRegistrationApi, getAllClubsRegistrationsApi, rejectClubRegis
 import toast from 'react-hot-toast'
 
 
-
-
 const ManageClubRegistrations = () => {
     useEffect(()=>{
       const fetchAllClubRegistrations = async()=>{
@@ -15,10 +13,11 @@ const ManageClubRegistrations = () => {
         if(res.statusCode==200){
           toast.success(res.message)
           setRegistrations(res.data)
-          setLoading(false)
+          setError(null)
         }else{
-          toast.error(res.message)
+          setError(res.message)
         }
+        setLoading(false)
       }
         fetchAllClubRegistrations();
     },[])
@@ -26,24 +25,30 @@ const ManageClubRegistrations = () => {
     const [registrations , setRegistrations] = useState([]) 
     const [loading , setLoading] = useState(true)
     const [searchTerm , setSearchTerm] = useState("")
+    const [error , setError]  = useState(null)
 
       const filteredClubRegistrations = registrations.filter((registration)=>registration.name.includes(searchTerm) || registration.description.includes(searchTerm) )
-    
+      useEffect(() => {
+        if (filteredClubRegistrations.length === 0) {
+          setError("No clubs found");
+        }
+      }, [filteredClubRegistrations]);
     const acceptRegistration = async(e,id)=>{
       e.stopPropagation();
       console.log(id);
       
       const res = await acceptClubRegistrationApi(id);
+      
       if(res.statusCode==200){
         toast.success(res.message)
         setRegistrations(prev=>prev.filter(r=> r.clubId != id))
         console.log("Hello",filteredClubRegistrations);
         
       }else{
+        setError(true)
         toast.error(res.message)
       }
     }
-    
     
     const rejectRegistration = async(e,id)=>{
       e.stopPropagation();
@@ -60,6 +65,25 @@ const ManageClubRegistrations = () => {
     if(loading){
       return <Loader />
     }
+    if (error) {
+      return (
+        <div className="min-h-screen flex flex-col justify-center items-center">
+          <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-md text-center">
+            <h2 className="text-5xl font-bold">{error}!</h2>
+            
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2"
+            >
+              {/* SImilar to pressing the reload button */}
+              Retry
+            </Button>
+          </div>
+        </div>
+      );
+    }
+    
     return (
         <div className="min-h-screen flex flex-col ">
           <main className="flex-grow container mx-auto px-4 py-8">
