@@ -1,9 +1,12 @@
 import React from 'react'
-import { Polls } from '../components/index'
+import { Footer, GradientBackground, Navbar, Polls, PollsComponent } from '../components/index'
 const PollsPage = () => {
   return (
-    <Polls />
+    <GradientBackground>
+    <Navbar />
+    <PollsComponent />
+    <Footer  />
+    </GradientBackground>
   )
 }
-
 export default PollsPage

@@ -4,7 +4,7 @@ import { X, Trash2 } from "lucide-react";
 import { deleteClubApi, deleteEventApi } from "../../../apiEndPoints";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-export function DeleteConfirmationModal({  onClose ,eventId , clubId ,modify }) {
+export function DeleteConfirmationModal({  onClose ,eventId , clubId ,setEvents }) {
   const navigate = useNavigate();
 
   const handleDelete = async()=>{
@@ -22,7 +22,7 @@ export function DeleteConfirmationModal({  onClose ,eventId , clubId ,modify }) 
         delete myAxios.defaults.headers.common["Authorization"];
         navigate("/auth")
       }else{
-        modify((prev)=>!prev) // For event delete from the card to again call the api
+        setEvents((prevEvents)=>prevEvents.filter(prevEvent=>prevEvent.id != eventId ))
       }
     }else{
       toast.error(res.message)

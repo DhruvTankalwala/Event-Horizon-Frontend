@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
   location: Yup.string().required("Location is required"),
   totalRegistrations : Yup.string().required("Total registrations is required"),
   imageUrl : Yup.mixed()
-                  .required("Club Icon is required is required")
+                  .required("Club Icon is required")
                   ,
   speakers: Yup.array().of(
     Yup.object().shape({
@@ -39,7 +39,7 @@ const validationSchema = Yup.object({
     totalRegistrations: "", 
     speakers: [],
   }
-export function CreateEventForm({ onClose , event  , modifyEvent  }) {
+export function CreateEventForm({ onClose , event ,setEvents}) {
 
   const [imagePreview , setImagePreview] = useState(null);
 
@@ -50,25 +50,24 @@ export function CreateEventForm({ onClose , event  , modifyEvent  }) {
       console.log(values);
       let res;
       if(event!=null){
-        
          res = await updateEventApi(values);
-        
       }else{  
         console.log("Values",values);
         res = await createEvent(values);
       }
-      console.log(res);
+      console.log("res",res);
       if(res.statusCode >= 200 && res.statusCode < 300){
           toast.success(res.message)
-          modifyEvent((prev)=>!prev)
-           onClose();
+          onClose();
+          setEvents((prevEvents)=>[...prevEvents , res.data])
+          console.log("Events updated");
+          
       }else{
         toast.error(res.message)
       }
     },
   });
-  console.log("event:",event);
-  
+
   const imageRef = useRef(null);
 
   const addSpeaker = () => {
@@ -167,8 +166,6 @@ export function CreateEventForm({ onClose , event  , modifyEvent  }) {
             ref={imageRef}
             accept="image/*,.jpg,.jpeg,.png,.gif , .bmp , webp"
             className="hidden"
-            error = {formik.errors.imageUrl}
-            touched = {formik.touched.imageUrl}
           />
           <Button 
             type = "button"
@@ -186,7 +183,6 @@ export function CreateEventForm({ onClose , event  , modifyEvent  }) {
               formik.touched.imageUrl && formik.errors.imageUrl &&
               <div className="text-red-500 text-sm mt-2" >{formik.errors.imageUrl} </div>
             }
-          
           <Input 
             name="totalRegistrations" 
             placeholder="Total registrations"
@@ -208,8 +204,8 @@ export function CreateEventForm({ onClose , event  , modifyEvent  }) {
             {formik.values.speakers?.map((speaker, index) => (
               <div key={index} className="flex gap-2 mb-2">
                 <Input placeholder="Name" error={formik.errors.speakers?.[index]?.name} touched={formik.touched.speakers?.[index]?.name} {...formik.getFieldProps(`speakers[${index}].name`)} className="flex-1 bg-gray-800 text-white" />
-                <Input placeholder="Position" error={formik.errors.speakers?.[index]?.position} touched={formik.touched.speakers?.[index]?.position} {...formik.getFieldProps(`speakers[${index}].name`)} {...formik.getFieldProps(`speakers[${index}].position`)} className="flex-1 bg-gray-800 text-white" />
-                <Input placeholder="Company" error={formik.errors.speakers?.[index]?.company} touched={formik.touched.speakers?.[index]?.company} {...formik.getFieldProps(`speakers[${index}].name`)} {...formik.getFieldProps(`speakers[${index}].company`)} className="flex-1 bg-gray-800 text-white" />
+                <Input placeholder="Position" error={formik.errors.speakers?.[index]?.position} touched={formik.touched.speakers?.[index]?.position} {...formik.getFieldProps(`speakers[${index}].position`)} {...formik.getFieldProps(`speakers[${index}].position`)} className="flex-1 bg-gray-800 text-white" />
+                <Input placeholder="Company" error={formik.errors.speakers?.[index]?.company} touched={formik.touched.speakers?.[index]?.company} {...formik.getFieldProps(`speakers[${index}].company`)} {...formik.getFieldProps(`speakers[${index}].company`)} className="flex-1 bg-gray-800 text-white" />
                 <button className="hover:cursor-pointer" type="button"  onClick={() => removeSpeaker(index)}>
                   <Trash size={20} />
                 </button>

@@ -11,7 +11,7 @@ const EventRegistrationsComponent = () => {
     const [expandedEventId , setExpandedEventId] = useState(null);
     const filteredEvents = registrations.filter((event) => event.title.toLowerCase().includes(searchTerm.toLowerCase()))
     const fetchAllEventRegistrations = async ()=>{
-        setLoading(true)
+        setLoading(true);
         const res = await eventRegistrationsApi();
         if(res.statusCode==200){
             setRegistrations(res.data);
@@ -175,4 +175,4 @@ const EventRegistrationsComponent = () => {
 
 }
 
-export default EventRegistrationsComponent
+export default EventRegistrationsComponent;

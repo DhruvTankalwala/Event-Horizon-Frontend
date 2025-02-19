@@ -12,11 +12,9 @@ export function EventRegistrationForm({ eventId,eventName, onClose,setRegistrati
   const handleSubmit = async(e) => {
     e.preventDefault()
     const res = await registerForEvent(eventId,{semester,customAnswer:reason});
-    // Here you would typically send the form data to your backend
     console.log("Form submitted:", res.data);
+    onClose();
     setRegistrations((prev)=>prev+1);
-    // Close the form after submission
-    onClose()
   }
 
   return (
@@ -33,7 +31,7 @@ export function EventRegistrationForm({ eventId,eventName, onClose,setRegistrati
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", damping: 15 }}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors hover:cursor-pointer">
           <X size={24} />
         </button>
 

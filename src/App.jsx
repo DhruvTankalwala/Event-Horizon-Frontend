@@ -12,6 +12,8 @@ import ClubDetails from './pages/ClubDetails'
 import EventDetailsPage from './pages/EventDetails'
 import EventRegistrationsPage from './pages/EventRegistrationsPage'
 import ManageClubRegistrationsPage from './pages/ManageClubRegistrationsPage'
+import ManageAttendancePage from './pages/ManageAttendancePage'
+import OngoingEventsPage from './pages/OngoingEventsPage'
 function App() {
   const navigate = useNavigate()
   useEffect(()=>{
@@ -78,7 +80,20 @@ function App() {
               <ManageClubRegistrationsPage />
             </AuthRoute>
           }/>
-           
+           <Route
+         path='/manage-attendance' 
+         element={
+          <AuthRoute>
+              <OngoingEventsPage />
+          </AuthRoute>
+          }/>
+            <Route
+         path='/events/:eventId/attendance' 
+         element={
+          <AuthRoute>
+              <ManageAttendancePage />
+          </AuthRoute>
+          }/>
     </Routes>
     <Toaster />
     </>  

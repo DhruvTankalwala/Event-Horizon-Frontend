@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Calendar, Clock, MapPin, Search ,Plus } from "lucide-react"
-import {Navbar,Footer, Loader, GradientBackground, EventCard , Button} from "../index"
+import { Loader, GradientBackground, EventCard , Button} from "../index"
 import { getAllEvents } from "../../apiEndPoints"
 import toast from "react-hot-toast"
 import { EventRegistrationForm } from "./components/EventRegistrationForm"
@@ -123,7 +123,7 @@ export default function EventsComponent() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredEvents.map((event) => (
-              <EventCard key={event.id} eventDetails={event} modifyEvent={setModifiedEvent} />
+              <EventCard key={event.id} eventDetails={event} setEvents={setEvents} />
             ))}
           </motion.div>
         </AnimatePresence>
@@ -132,7 +132,7 @@ export default function EventsComponent() {
       {/* Create Event Modal */}
       <AnimatePresence>
         {isCreateFormOpen && (
-          <CreateEventForm onClose={() => setIsCreateFormOpen(false)} modifyEvent={setModifiedEvent} />
+          <CreateEventForm onClose={() => setIsCreateFormOpen(false)} setEvents={setEvents} />
         )}
       </AnimatePresence>
     </div>

@@ -1,30 +1,48 @@
 import React from 'react'
 import ReactDOM from "react-dom"
-import { motion } from "framer-motion"
+import { m, motion } from "framer-motion"
 import { X, Plus, Trash  } from "lucide-react"
 import {Button , Input} from "../../index"
 import { useFormik } from 'formik'
-import { addMembersApi } from '../../../apiEndPoints'
+import { addMembersApi, editMemberApi } from '../../../apiEndPoints'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-const AddMembersForm =({onClose}) => {
+const AddMembersForm =({ memberData, onClose , addMember }) => {
   const {clubId} = useParams()
     console.log("Hello member");
     const formik = useFormik({
-      initialValues : {
-        members: [{ email: "", designation: "" }],
-      
-      },
+      initialValues : memberData ||  { email: "", designation: "" }
+      ,
       onSubmit : async(values)=>{
         console.log("Values: ",values);
-        const res = await addMembersApi(clubId,values.members);
-        if(res.statusCode == 201){
-            toast.success(res.message);
-            onClose();
+        if(memberData){
+          const res = await editMemberApi(values)
+          
+          if(res.statusCode == 200){
+            toast.success(res.message)
+            addMember((members)=>{
+              return members.map((member)=>{
+                return member.id==res.data.id ? res.data : member
+              })
+            })
+            onClose()
+          }else{
+            toast.error(res.message)
+          }
         }else{
-          toast.error(res.message);
+          debugger
+          const res = await addMembersApi(clubId,values);
+            if(res.statusCode == 201){
+              toast.success(res.message);
+              console.log(res.data);
+              addMember((prev)=>[...prev , res.data]);
+              onClose();
+            } else{
+              toast.error(res.message);
+          }
         }
+        
       }
     })
     return (
@@ -48,46 +66,28 @@ const AddMembersForm =({onClose}) => {
             <h2 className="text-2xl font-bold text-white mb-6">Add New Members</h2>
     
             <form onSubmit={formik.handleSubmit}  className="space-y-6">
-              {formik.values.members?.map((member, index) => (
-                <div key={index} className="flex flex-col space-y-2">
+              
+                <div className="flex flex-col space-y-2">
                   <div className="flex items-center justify-between">
-                    <label htmlFor={`email-${index}`} className="text-white">
-                      Member {index + 1}
+                    <label htmlFor={`email`} className="text-white">
+                      Member 
                     </label>
-                    {index > 0 && (
-                      <Button
-                       type="button" 
-                       onClick={()=>formik.setFieldValue("members" , 
-                        formik.values.members.filter((_,i)=>(
-                          i!=index
-                        ))
-                        )}
-                       variant="ghost" 
-                       size="sm" >
-                        <Trash className="h-4 w-4" />
-                      </Button>
-                    )}
                   </div>
                   <Input
-                    id={`email-${index}`}
+                    id={`email`}
                     type="email"
                     placeholder="Email"
-                    {...formik.getFieldProps(`members[${index}].email`)}
+                    {...formik.getFieldProps(`email`)}
                     className="bg-gray-800 text-white border-gray-700"
                   />
                   <Input
                     placeholder="Designation"
-                    {...formik.getFieldProps(`members[${index}].designation`)}
+                    {...formik.getFieldProps(`designation`)}
                     className="bg-gray-800 text-white border-gray-700"
                   />
                 </div>
-              ))}
-    
-              <Button type="button" onClick = {()=>formik.setFieldValue("members" , [...formik.values.members , {email :"" , designation : ""} ] )}  variant="outline" className="w-full">
-                <Plus className="mr-2 h-4 w-4" /> Add Another Member
-              </Button>
-    
-              <Button type="submit" className="w-full">
+              
+              <Button type="submit" className="w-full p-2">
                 Save Members
               </Button>
             </form>

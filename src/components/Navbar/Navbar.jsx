@@ -9,8 +9,9 @@ const navItems = [
   { name: "Registered Events", to: "/registered-events" },
   { name: "Polls", to: "/polls" },
   { name : "Manage-Registratins" ,to: "/manage-registrations"},
-  { name : "Manage-Club-Registratins" ,to: "/manage-club-registrations"}
-]
+  { name : "Manage-Club-Registratins" ,to: "/manage-club-registrations"},
+  { name : "Manage Attendance" ,to :"/manage-attendance" }
+] 
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)

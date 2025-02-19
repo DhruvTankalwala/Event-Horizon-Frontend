@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { CreateEventForm } from "./CreateEventForm";
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 
-export function EventCard({eventDetails , modifyEvent}) {
+export function EventCard({eventDetails , setEvents}) {
   const [selectedForm, setSelectedForm] = useState("");
 
   const {
@@ -103,9 +103,9 @@ export function EventCard({eventDetails , modifyEvent}) {
           Delete
         </motion.button>
       </div>
-          {selectedForm =="edit" && <CreateEventForm event={eventDetails} onClose={()=>setSelectedForm("")} modify={modifyEvent}  /> }
+          {selectedForm =="edit" && <CreateEventForm event={eventDetails} onClose={()=>setSelectedForm("")} setEvents={setEvents}  /> }
             {/* Write for register */}
-          {selectedForm =="delete" && <DeleteConfirmationModal eventId={id}  onClose={()=>setSelectedForm("")} modify={modifyEvent} /> }
+          {selectedForm =="delete" && <DeleteConfirmationModal eventId={id}  onClose={()=>setSelectedForm("")} setEvents={setEvents} /> }
     </motion.div>
   );
 }

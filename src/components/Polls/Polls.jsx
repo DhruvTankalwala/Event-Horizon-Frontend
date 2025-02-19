@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar , Footer, GradientBackground } from "../index"
 import { BarChart2 } from "lucide-react"
-
+import CreatePollForm from "./components/CreatePollForm"
 
 const initialPolls = [
   {
@@ -35,7 +35,7 @@ const initialPolls = [
 
 export default function Polls() {
   const [polls, setPolls] = useState(initialPolls)
-
+  const [isCreateFormOpen , setIsCreateFormOpen] = useState(false)
   const handleVote = (pollId, optionId) => {
     setPolls(
       polls.map((poll) => {
@@ -60,9 +60,7 @@ export default function Polls() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0F0F1A] text-white font-space">
-      <GradientBackground >
-      <Navbar />
+    <div className="min-h-screen  text-white font-space">
       <main className="container mx-auto px-4 py-16">
         <motion.h1
           className="text-5xl font-bold text-center mb-12"
@@ -128,8 +126,7 @@ export default function Polls() {
           ))}
         </div>
       </main>
-      <Footer />
-      </GradientBackground>
+      {isCreateFormOpen && <CreatePollForm onClose={()=>setIsCreateFormOpen(false)} />}
     </div>
   )
 }

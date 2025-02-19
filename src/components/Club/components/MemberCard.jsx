@@ -4,8 +4,12 @@ import { MailIcon, MoreHorizontal, Edit, Trash } from "lucide-react";
 import { Button } from "../../index";
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
-const MemberCard = ({ member, onEdit, onDelete }) => (
-  <motion.div
+
+
+
+const MemberCard = ({ member, handleDelete ,onOpen }) => {
+
+  return <motion.div
     className="relative rounded-2xl overflow-hidden"
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -64,7 +68,7 @@ const MemberCard = ({ member, onEdit, onDelete }) => (
             sideOffset={5}
           >
             <DropdownMenu.Item
-              onSelect={onEdit}
+              onSelect={onOpen}
               className="p-2 cursor-pointer hover:bg-gray-700 rounded"
             >
               <div className="flex items-center gap-2">
@@ -73,7 +77,7 @@ const MemberCard = ({ member, onEdit, onDelete }) => (
               </div>
             </DropdownMenu.Item>
             <DropdownMenu.Item
-              onSelect={onDelete}
+              onSelect={handleDelete}
               className="p-2 cursor-pointer hover:bg-gray-700 rounded"
             >
               <div className="flex items-center gap-2">
@@ -86,6 +90,6 @@ const MemberCard = ({ member, onEdit, onDelete }) => (
       </DropdownMenu.Root>
     </div>
   </motion.div>
-);
+}
 
 export default MemberCard;

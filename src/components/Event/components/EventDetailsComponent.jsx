@@ -10,7 +10,7 @@ const EventDetailsComponent = () => {
     const {eventId} = useParams();
     const [event,setEvent] = useState({});
     const [loading , setLoading] = useState(true);
-    const [isOpen , setIsOpen]  = useState(false)
+    const [isOpen , setIsOpen]  = useState(false);
     useEffect(()=>{
         const fetchEventDetails = async()=> {
         setLoading(true);
@@ -97,16 +97,19 @@ const EventDetailsComponent = () => {
               </ul> */}
   
               <motion.button
-                className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-md shadow-md hover:from-purple-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition-all duration-300"
+                className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-md shadow-md hover:from-purple-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition-all duration-300 hover:cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={()=>setIsOpen(true)}
               >
                 Register for Event
               </motion.button>
             </div>
           </motion.div>
         </main>
-        
+        {
+          isOpen && <EventRegistrationForm  eventId={eventId} eventName={event.eventName}  onClose={()=>setIsOpen(false)} />
+        }  
       </div>
     )
 }

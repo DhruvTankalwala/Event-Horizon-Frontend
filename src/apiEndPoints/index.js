@@ -329,3 +329,73 @@ export const addMembersApi = async(clubId,values)=>{
         return error.response.data;
     }
 }
+
+export const deleteMemberApi = async(id)=>{
+    try {
+        const res = await myAxios.delete(`/clubs/members/${id}`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+
+export const editMemberApi = async(values)=>{
+    try {
+        const res = await myAxios.patch(`/clubs/members`,values);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+
+
+export const getAllOngoingEventsApi = async()=>{
+    try {
+        const res = await myAxios.get(`/clubs/ongoing-club-events`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+
+
+
+export const getAllApprovedRegistrationsApi = async(eventId)=>{
+    try {
+          console.log(eventId);
+          
+        const res = await myAxios.get(`/events/registrations/${parseInt(eventId)}/not-attended`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
+export const acceptAttendanceApi = async(id)=>{
+    try {
+        console.log(id);
+      const res = await myAxios.get(`/events/registrations/accept-registrations/${parseInt(id)}`);
+      console.log(res.data);
+      return res.data;
+  } catch (error) {
+      return error.response.data;
+  }
+}
+
+export const getPollsApi = async(id)=>{
+    try {
+        console.log(id);
+      const res = await myAxios.get(`/polls`);
+      console.log(res.data);
+      return res.data;
+  } catch (error) {
+      return error.response.data;
+  }
+}

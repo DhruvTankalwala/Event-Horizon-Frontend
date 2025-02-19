@@ -25,6 +25,11 @@ import ManageClubRegistrations from "./Club/components/ManageClubRegistrations";
 import { DeleteConfirmationModal } from "./Event/components/DeleteConfirmationModal";
 import AddMembersForm from "./Club/components/AddMembersForm";
 import MemberCard from "./Club/components/MemberCard"
+import MembersComponent from "./Club/components/MembersComponent";
+import OngoingEventsComponent from "./ManageAttendanceComponent/OngoingEventsComponent";
+import { EventSummaryCardComponent } from "./ManageAttendanceComponent/components/EventSummaryCard";
+import ManageAttendanceComponent from "./ManageAttendanceComponent/ManageAttendanceComponent";
+import PollsComponent from "./Polls/components/PollsComponent";
 export {
     Navbar ,
     Footer ,
@@ -52,5 +57,10 @@ export {
     ManageClubRegistrations,
     DeleteConfirmationModal,
     AddMembersForm,
-    MemberCard
+    MemberCard,
+    MembersComponent,
+    OngoingEventsComponent,
+    EventSummaryCardComponent,
+    ManageAttendanceComponent,
+    PollsComponent
 }

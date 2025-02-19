@@ -1,7 +1,7 @@
   import { useState, useEffect } from "react"
   import { motion, AnimatePresence } from "framer-motion"
   import { Calendar, Clock, MapPin, Users, Heart, MailIcon , Edit , Trash2 ,UserPlus } from "lucide-react"
-  import {Button, Loader , EventCard , ClubRegistrationForm ,DeleteConfirmationModal ,MemberCard , AddMembersForm } from "../../index"
+  import {Button, Loader , EventCard , ClubRegistrationForm ,DeleteConfirmationModal , AddMembersForm , MembersComponent } from "../../index"
   import { getClubDetailsApi } from "../../../apiEndPoints"
   import { useParams } from "react-router-dom"
   import toast from "react-hot-toast"
@@ -108,7 +108,7 @@
                   <EventCard
                       key={event.id}
                       eventDetails = {event}
-                    />
+                  />
                     ))}
               </motion.div>
             </AnimatePresence>
@@ -123,40 +123,11 @@
             >
               Club Members
             </motion.h2>
-            <div className="flex justify-center mb-8 space-x-4">
-            <Button onClick={()=>setModalOpen("addMembers")} className="bg-green-600 hover:bg-green-700 px-2 py-3">
-              <UserPlus className="w-4 h-4 mr-2" /> Add Members
-            </Button>
-            <Button  className="bg-blue-600 hover:bg-blue-700">
-              <Edit className="w-4 h-4 mr-2" /> Edit Members
-            </Button>
-            <Button  variant="destructive">
-              <Trash2 className="w-4 h-4 mr-2" /> Delete Members
-            </Button>
-          </div>
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1,
-                  },
-                },
-              }}
-            >
-              {console.dir(clubData)}
-              { clubData.members.length >0 && clubData.members.map((member) => (
-                
-                <MemberCard key={member.id} member={member} />
-              ))}
-            </motion.div>
+              <MembersComponent memberValues={clubData.members} />
           </section>
         </main>
               {modalOpen == "edit" && <ClubRegistrationForm club={clubData} onClose={()=>setModalOpen("") } /> }
               {modalOpen == "delete" &&<DeleteConfirmationModal clubId={clubId} onClose={()=>setModalOpen("")} /> }
-              {modalOpen == "addMembers" && <AddMembersForm  onClose={()=>setModalOpen("") } /> }
       </div>
     )
   }
