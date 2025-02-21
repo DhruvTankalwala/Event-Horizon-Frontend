@@ -10,12 +10,15 @@ const navItems = [
   { name: "Polls", to: "/polls" },
   { name : "Manage-Registratins" ,to: "/manage-registrations"},
   { name : "Manage-Club-Registratins" ,to: "/manage-club-registrations"},
-  { name : "Manage Attendance" ,to :"/manage-attendance" }
+  { name : "Manage Attendance" ,to :"/manage-attendance" },
+  { name  : "Event Analytics" , to:"/event-analytics" },
+  {name : "Logout" , to: "/logout"}
 ] 
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-
+  const isLogin = localStorage.getItem("authToken")  
+  
   return (
     <nav className="bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,6 +39,7 @@ export function Navbar() {
                   {item.name}
                 </Link>
               ))}
+              
             </div>
           </div>
           <div className="md:hidden">

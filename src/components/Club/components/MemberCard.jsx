@@ -7,8 +7,10 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 
 
-const MemberCard = ({ member, handleDelete ,onOpen }) => {
+const MemberCard = ({ member, handleDelete ,onOpen , clubEmail }) => {
 
+  const userRole = localStorage.getItem("userRole")
+    const userEmail   =  localStorage.getItem("email")
   return <motion.div
     className="relative rounded-2xl overflow-hidden"
     initial={{ opacity: 0, scale: 0.8 }}
@@ -55,6 +57,8 @@ const MemberCard = ({ member, handleDelete ,onOpen }) => {
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
     </div>
     {/* Three dots dropdown menu */}
+    {
+      userRole == "CLUB_ADMIN" && userEmail == clubEmail &&
     <div className="absolute top-2 right-2">
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
@@ -89,6 +93,9 @@ const MemberCard = ({ member, handleDelete ,onOpen }) => {
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
     </div>
+
+    }
+    
   </motion.div>
 }
 

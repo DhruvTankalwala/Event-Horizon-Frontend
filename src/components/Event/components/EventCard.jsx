@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CalendarDays, Clock, MapPin, Users, Star, User, Edit, Trash2 } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Users, Star, User, Edit, Trash2, CheckCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CreateEventForm } from "./CreateEventForm";
+import {Button, EventRegistrationForm, FeedbackForm} from "../../index"
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 
-export function EventCard({eventDetails , setEvents}) {
+export function EventCard({eventDetails , setEvents }) {
   const [selectedForm, setSelectedForm] = useState("");
-
+  const userRole = localStorage.getItem("userRole")
+  const userEmail = localStorage.getItem("email")
   const {
     id,
     title,
@@ -21,7 +23,11 @@ export function EventCard({eventDetails , setEvents}) {
     totalRegistrations,
     clubName,
     speakers,
+    clubEmail,
+    registered,
+    attended
   } = eventDetails;
+
   
   return (
     <motion.div
@@ -77,7 +83,18 @@ export function EventCard({eventDetails , setEvents}) {
           )}
         </div>
       </Link>
-      <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between gap-2">
+      {
+        eventDetails.status == "PAST" && 
+        eventDetails.attended  ?
+            <Button
+                onClick={() => setSelectedForm("feedback-form")}
+                className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white w-full"
+              >
+                Give Feedback
+              </Button> :
+      // Can add view feedbacks 
+        userRole == "CLUB_ADMIN" && userEmail == clubEmail ?
+        <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between gap-2">
         <motion.button
           className="w-full sm:w-auto py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-all duration-300 hover:cursor-pointer"
           whileHover={{ scale: 1.05 }}
@@ -103,9 +120,25 @@ export function EventCard({eventDetails , setEvents}) {
           Delete
         </motion.button>
       </div>
+      :
+      <div className="flex justify-center">
+          {userEmail != clubEmail &&
+         <Button
+          variant="default"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={!registered ? () => setSelectedForm("register-for-event") : undefined}
+          disabled={registered}
+          className={registered ? "w-full" : "cursor-pointer w-full"}
+        >
+          { !registered ? "Register for Event" : <>Registered <CheckCheck /></> }
+        </Button>}  
+      </div>
+    }
+          { selectedForm == "feedback-form" && <FeedbackForm  eventId={eventDetails.id} onClose={()=>setSelectedForm(null)} eventName={eventDetails.title} /> }
           {selectedForm =="edit" && <CreateEventForm event={eventDetails} onClose={()=>setSelectedForm("")} setEvents={setEvents}  /> }
-            {/* Write for register */}
           {selectedForm =="delete" && <DeleteConfirmationModal eventId={id}  onClose={()=>setSelectedForm("")} setEvents={setEvents} /> }
+          {selectedForm =="register-for-event" && <EventRegistrationForm eventId={id} eventName={title} onClose={()=>setSelectedForm("")  } /> }
     </motion.div>
   );
 }

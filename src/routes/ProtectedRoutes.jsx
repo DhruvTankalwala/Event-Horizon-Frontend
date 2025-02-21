@@ -11,7 +11,7 @@ function AuthRouter({children}){
       console.log("Inside the useEffect of authrouter");
       const token = localStorage.getItem("authToken");
           if(!token){
-            navigate("/auth")      
+            navigate("/auth")
           }
           myAxios.defaults.headers.common['authorization'] = token;
           console.log(token);

@@ -30,6 +30,9 @@ import OngoingEventsComponent from "./ManageAttendanceComponent/OngoingEventsCom
 import { EventSummaryCardComponent } from "./ManageAttendanceComponent/components/EventSummaryCard";
 import ManageAttendanceComponent from "./ManageAttendanceComponent/ManageAttendanceComponent";
 import PollsComponent from "./Polls/components/PollsComponent";
+import ProgressComponent from "./ProgessComponent";
+import AnalyticsComponent from "./AnalyticsComponent/AnalyticsComponent";
+import { FeedbackForm } from "./FeedbackForm";
 export {
     Navbar ,
     Footer ,
@@ -62,5 +65,8 @@ export {
     OngoingEventsComponent,
     EventSummaryCardComponent,
     ManageAttendanceComponent,
-    PollsComponent
+    PollsComponent,
+    ProgressComponent,
+    AnalyticsComponent,
+    FeedbackForm
 }

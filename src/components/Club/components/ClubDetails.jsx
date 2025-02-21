@@ -15,6 +15,10 @@
     const [clubData, setClubData] = useState({}); // <-- Store club details
     const [loading , setLoading] = useState(true)
     const [modalOpen , setModalOpen] = useState("");
+
+    const userRole = localStorage.getItem("userRole")
+    const userEmail   =  localStorage.getItem("email")
+
     useEffect(()=>{
       const getClubDetails = async()=>{
         setLoading(true)
@@ -37,7 +41,9 @@
     return (
       <div className="min-h-screen flex flex-col ">
         <main className="flex-grow container mx-auto px-4 py-8">
-            <div className="flex justify-end mb-4">
+            {
+              userRole == "CLUB_ADMIN" && userEmail == clubData.email &&
+              <div className="flex justify-end mb-4">
             <Button className="p-2 mr-2" variant="edit"  onClick={() => setModalOpen("edit")}>
               <Edit className="w-4 h-4 mr-2" /> Edit Club
             </Button>
@@ -45,6 +51,7 @@
               <Trash2 className="w-4 h-4 mr-2" /> Delete Club
             </Button>
           </div>
+            }
 
         <div className="flex justify-center mb-8">
           <img
@@ -123,7 +130,7 @@
             >
               Club Members
             </motion.h2>
-              <MembersComponent memberValues={clubData.members} />
+              <MembersComponent memberValues={clubData.members} clubEmail={clubData.email} />
           </section>
         </main>
               {modalOpen == "edit" && <ClubRegistrationForm club={clubData} onClose={()=>setModalOpen("") } /> }

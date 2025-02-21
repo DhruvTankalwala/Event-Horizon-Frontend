@@ -17,6 +17,8 @@ export default function EventsComponent() {
   const [modifiedEvent , setModifiedEvent] = useState(false);
   const [isCreateFormOpen , setIsCreateFormOpen] = useState(null);
 
+  const userRole = localStorage.getItem("userRole")
+
   useEffect(()=>{
        const fetchAllEvents = async()=>{
             setLoading(true)
@@ -102,7 +104,9 @@ export default function EventsComponent() {
         </motion.div>
   
         {/* Create Event Button */}
-        <div className="flex justify-end mb-4">
+        {
+          userRole == "CLUB_ADMIN" &&
+          <div className="flex justify-end mb-4">
           <Button
             onClick={() => setIsCreateFormOpen(true)}
             className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white px-3 py-2 hover:cursor-pointer"
@@ -110,6 +114,7 @@ export default function EventsComponent() {
             <Plus size={16} className="mr-2" /> Create Event
           </Button>
         </div>
+        }
   
         {/* Event List with Smooth Transitions */}
         <AnimatePresence mode="popLayout">

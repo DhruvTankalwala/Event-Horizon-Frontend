@@ -1,8 +1,8 @@
 import React, { useEffect , useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getEventDetailsApi } from '../../../apiEndPoints';
-import  { Loader , EventRegistrationForm } from "../../index" 
-import { Calendar, Clock, MapPin, Users } from "lucide-react"
+import  { Loader , EventRegistrationForm ,Button } from "../../index" 
+import { Calendar, CheckCheck, Clock, MapPin, Users } from "lucide-react"
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 
@@ -11,6 +11,7 @@ const EventDetailsComponent = () => {
     const [event,setEvent] = useState({});
     const [loading , setLoading] = useState(true);
     const [isOpen , setIsOpen]  = useState(false);
+
     useEffect(()=>{
         const fetchEventDetails = async()=> {
         setLoading(true);
@@ -95,18 +96,21 @@ const EventDetailsComponent = () => {
                   </li>
                 ))}
               </ul> */}
-  
-              <motion.button
-                className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold rounded-md shadow-md hover:from-purple-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 transition-all duration-300 hover:cursor-pointer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={()=>setIsOpen(true)}
-              >
-                Register for Event
-              </motion.button>
-            </div>
+              
+              <Button
+              variant= "default"
+              whileHover={!event.registered ? { scale: 1.05 } : undefined}
+              whileTap={!event.registered ? { scale: 0.95 } : undefined}
+              onClick={!event.registered ? () => setIsOpen(true) : undefined}
+              disabled={event.registered}
+              className={event.registered ? "w-full" : "cursor-pointer w-full"}
+            >
+              {!event.registered ? "Register for Event" : <>Registered <CheckCheck /></>}
+            </Button> 
+
+            </div>  
           </motion.div>
-        </main>
+        </main> 
         {
           isOpen && <EventRegistrationForm  eventId={eventId} eventName={event.eventName}  onClose={()=>setIsOpen(false)} />
         }  

@@ -12,7 +12,7 @@ export default function ClubsComponent() {
   const [isLoading, setIsLoading] = useState(false)
   const [clubsData, setClubsData] = useState([])
   const[isClubRegistrationOpen,setIsClubRegistrationOpen] = useState(false);
-
+  const userRole = localStorage.getItem("userRole")
   useEffect(() => {  
     const getAllClubDetails = async()=>{
       setIsLoading(true);
@@ -64,12 +64,16 @@ export default function ClubsComponent() {
             <Search className="absolute left-3 top-2.5 text-gray-400" />
           </motion.div>
           <div className="flex justify-center mb-8">
-            <Button
+            {
+              userRole == "USER" ?
+              <Button
               onClick={() => setIsClubRegistrationOpen(true)}
               className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold py-2 px-6 rounded-full hover:from-purple-600 hover:to-cyan-600 transition-all duration-300"
             >
               Register as a Club
-            </Button>
+            </Button> : null
+            }
+            
           </div>
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"

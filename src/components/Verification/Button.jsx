@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { cn } from "../ClassMerger";
-
+import { motion } from "framer-motion";
 export const Button = forwardRef(function Button(
   { className, variant = "default", ...props },
   ref
@@ -22,6 +22,6 @@ export const Button = forwardRef(function Button(
   };
 
   return (
-    <button className={cn(baseStyles, variantStyles[variant], className)} ref={ref} {...props} />
+    <motion.button className={cn(baseStyles, variantStyles[variant], className)} ref={ref} {...props} />
   );
 });

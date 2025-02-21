@@ -1,24 +1,25 @@
 import  React from "react"
+import ReactDOM from "react-dom"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
 import {Input , Button} from "../../index"
 import { registerForEvent } from "../../../apiEndPoints"
 
-export function EventRegistrationForm({ eventId,eventName, onClose,setRegistrations }){
+export function EventRegistrationForm({ eventId,eventName, onClose }){
   const [semester, setSemester] = useState("")
   const [reason, setReason] = useState("")
 
   const handleSubmit = async(e) => {
     e.preventDefault()
+  
     const res = await registerForEvent(eventId,{semester,customAnswer:reason});
     console.log("Form submitted:", res.data);
     onClose();
-    setRegistrations((prev)=>prev+1);
   }
 
-  return (
-    <motion.div
+  return (ReactDOM.createPortal( 
+      <motion.div
       className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -82,6 +83,6 @@ export function EventRegistrationForm({ eventId,eventName, onClose,setRegistrati
         <div className="absolute top-2 right-2 w-2 h-16 bg-gradient-to-b from-cyan-500 to-purple-500" />
       </motion.div>
     </motion.div>
-  )
-}
+     , document.getElementById("modal-root"))
+)}
 

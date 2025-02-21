@@ -6,7 +6,12 @@ export const loginApi = async(values)=>{
         const token = res.headers['authorization'];
         if(res.data.statusCode==200 && token){
             localStorage.setItem("authToken",token)
-            console.log(token);            
+            localStorage.setItem("email",values.email)
+            localStorage.setItem("userRole" , res.data.data.role)
+            console.log(res.data.data.role,"res.role");
+            
+            console.log(res.data);
+            console.log(token);
             myAxios.defaults.headers.common['authorization'] = token;
         }
         console.log(res);
@@ -84,11 +89,8 @@ export const isAuthenticatedUser = async()=>{
 
 export const registerForEvent = async(eventId,values)=>{
     try {
-        const res =  await myAxios.post(`/events/registrations/${parseInt(eventId)}`,formData , 
-            (prev)=>(
-                {...prev , "Content-Type": "multipart/form-data" }
-            )
-         );
+        const res =  await myAxios.post(`/events/registrations/${parseInt(eventId)}`,values);
+        console.log("registerForEvent: ",res.data);
         return res.data;
     } catch (error) {
         return error.response.data;
@@ -398,4 +400,27 @@ export const getPollsApi = async(id)=>{
   } catch (error) {
       return error.response.data;
   }
+}
+
+
+export const registerFeedback  = async(eventId,values)=>{
+    try {
+        console.log(values);
+        
+        const res =  await myAxios.post(`/feedbacks?eventId=${eventId}`,values);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+
+export const getAllEventsFeedbackApi = async(eventId)=>{
+    try {
+
+        const res =  await myAxios.get(`/feedbacks/event/${eventId}`);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
 }
