@@ -5,6 +5,7 @@ const LogoutComponent = () => {
   localStorage.removeItem("authToken")
   localStorage.removeItem("email")
   localStorage.removeItem("userRole")
+  localStorage.removeItem("userId")
     useEffect(()=>{
       navigate("/auth")
     },[])

@@ -34,6 +34,7 @@ import ProgressComponent from "./ProgessComponent";
 import AnalyticsComponent from "./AnalyticsComponent/AnalyticsComponent";
 import { FeedbackForm } from "./Feedback/components/FeedbackForm";
 import FeedbacksComponent from "./Feedback/FeedbacksComponent";
+import UserProfileComponent from "./UserProfile/UserProfileComponent";
 export {
     Navbar ,
     Footer ,
@@ -70,5 +71,6 @@ export {
     ProgressComponent,
     AnalyticsComponent,
     FeedbackForm,
-    FeedbacksComponent
+    FeedbacksComponent,
+    UserProfileComponent
 }

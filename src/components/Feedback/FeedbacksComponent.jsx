@@ -8,25 +8,6 @@ import { useParams , Link } from "react-router-dom"
 import { getAllEventsFeedbackApi } from "../../apiEndPoints"
 import toast from "react-hot-toast"
 
-// const mockFeedbacks = [
-//   {
-//     id: "1",
-//     userImage: "https://i.pravatar.cc/150?img=1",
-//     userName: "Alice Johnson",
-//     feedback: "The Tech Innovators Meetup was incredibly insightful. I learned so much about AI applications!",
-//     rating: 5,
-//     eventName: "Tech Innovators Meetup",
-//   },
-//   {
-//     id: "2",
-//     userImage: "https://i.pravatar.cc/150?img=2",
-//     userName: "Bob Smith",
-//     feedback: "Great workshop on entrepreneurship. The practical exercises were very helpful.",
-//     rating: 4,
-//     eventName: "Entrepreneurship Workshop",
-//   },
-// ]
-
 export default function FeedbacksComponent() {
   const params = useParams()
   const eventId = params.eventId

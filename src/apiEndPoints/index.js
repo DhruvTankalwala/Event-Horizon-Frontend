@@ -7,9 +7,9 @@ export const loginApi = async(values)=>{
         if(res.data.statusCode==200 && token){
             localStorage.setItem("authToken",token)
             localStorage.setItem("email",values.email)
+            localStorage.setItem("userId",res.data.data.id)
             localStorage.setItem("userRole" , res.data.data.role)
             console.log(res.data.data.role,"res.role");
-            
             console.log(res.data);
             console.log(token);
             myAxios.defaults.headers.common['authorization'] = token;
@@ -424,7 +424,7 @@ export const registerFeedback  = async(eventId,values)=>{
 
 export const getAllEventsFeedbackApi = async(eventId)=>{
     try {
-        const res =  await myAxios.get(`/feedbacks/event/${eventId}`);
+        const res =  await myAxios.get(`/feedbacks/events/${eventId}`);
         return res.data;
     } catch (error) {
         return error.response.data
@@ -477,6 +477,39 @@ export const deletePollApi = async ( pollId )=>{
 export const editPollApi = async (values) =>{
     try {
         const res = await myAxios.patch("/polls",values)
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+export const getUserProfileApi = async (userId) =>{
+    try {
+        const res = await myAxios.get(`/users/${parseInt(userId)}`)
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        
+        return error.response.data
+    }
+}
+
+export const editUserProfileApi = async (values) =>{
+    try {
+        const res = await myAxios.put(`/users/edit-profile`,values)
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        
+        return error.response.data
+    }
+}
+
+export const updateImageUrlApi = async(file)=>{
+    try {
+        const formData = new FormData()
+        formData.append("image",file)
+        const res = await myAxios.put("/users/upload-image",formData)
         return res.data;
     } catch (error) {
         return error.response.data

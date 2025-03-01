@@ -17,6 +17,7 @@ import OngoingEventsPage from './pages/OngoingEventsPage'
 import EventAnalyticsPage from './pages/AnalyticsPage'
 import LogoutComponent from './components/Logout/LogoutComponent'
 import EventFeedbacksPage from './pages/EventFeedbacksPage'
+import UserProfilePage from './pages/UserProfilePage'
 function App() {
   const navigate = useNavigate()
   useEffect(()=>{
@@ -112,10 +113,17 @@ function App() {
           </AuthRoute>
           }/>
           <Route
-         path='/feedbacks/event/:eventId'
+         path='/feedbacks/events/:eventId'
          element={
           <AuthRoute>
               <EventFeedbacksPage />
+          </AuthRoute>
+          }/>
+          <Route
+         path='/users/:userId'
+         element={
+          <AuthRoute>
+              <UserProfilePage />
           </AuthRoute>
           }/>
     </Routes>

@@ -97,7 +97,7 @@ export function EventCard({eventDetails , setEvents }) {
               </Button> :
               eventDetails.feedbackGiven ?
               <Button
-                onClick={()=>navigate(`/feedbacks/event/${eventDetails.id}`)}
+                onClick={()=>navigate(`/feedbacks/events/${eventDetails.id}`)}
                 className="flex-1 bg-purple-600 hover:bg-purple-700  text-white w-full"
               >
                 View Feedback
