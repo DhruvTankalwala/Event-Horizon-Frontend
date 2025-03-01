@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./Dialog";
-import { TextArea as Textarea, Button } from "./index";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../Dialog";
+import { TextArea as Textarea, Button } from "../../index";
 import { Star } from "lucide-react";
-import { registerFeedback } from "../apiEndPoints";
+import { registerFeedback } from "../../../apiEndPoints";
 import toast from "react-hot-toast";
 
 export function FeedbackForm({ onClose, eventName, eventId }) {

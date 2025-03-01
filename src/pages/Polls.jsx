@@ -1,5 +1,5 @@
 import React from 'react'
-import { Footer, GradientBackground, Navbar, Polls, PollsComponent } from '../components/index'
+import { Footer, GradientBackground, Navbar, PollsComponent } from '../components/index'
 const PollsPage = () => {
   return (
     <GradientBackground>

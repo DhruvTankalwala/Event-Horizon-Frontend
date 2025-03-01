@@ -207,6 +207,8 @@ export const deleteEventApi = async(eventId)=>{
 export const updateEventApi = async(values)=>{
     try {
         const formData = new FormData();
+        console.log(values);
+        
         formData.append("id", values.id); // if required for update
         formData.append("title", values.title);
         formData.append("description", values.description);
@@ -230,7 +232,13 @@ export const updateEventApi = async(values)=>{
                 formData.append(`speakers[${index}].company`, speaker.company);
             });
         }
-        const res = await myAxios.patch(`/events` ,formData);
+        formData.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+          });
+        
+        const res = await myAxios.patch(`/events` ,formData,
+            {headers : (prev)=>({...prev , "Content-Type": "multipart/form-data" })}
+        );  
         console.log(res.data);
         return res.data;
     } catch (error) {
@@ -242,7 +250,7 @@ export const registerClubApi = async(values)=>{
     try {
         /*
             Problem is that we cant directly send the entire form as values as the data contains plain text and binary data(file)
-            Spring cant deserialize that data . So we pass it in the formData which sends data in a key value pair like list
+            Spring cant deserialize that data . So we pass it in the formData which sends data in a key value pair like map
             
             Also @RequestBody can only deserialize(json to object) json data  so we cant use that on the backend so we use @ModelAttribute
         */ 
@@ -391,9 +399,8 @@ export const acceptAttendanceApi = async(id)=>{
   }
 }
 
-export const getPollsApi = async(id)=>{
+export const getPollsApi = async()=>{
     try {
-        console.log(id);
       const res = await myAxios.get(`/polls`);
       console.log(res.data);
       return res.data;
@@ -417,8 +424,59 @@ export const registerFeedback  = async(eventId,values)=>{
 
 export const getAllEventsFeedbackApi = async(eventId)=>{
     try {
-
         const res =  await myAxios.get(`/feedbacks/event/${eventId}`);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+export const getAllClubsPastEventsApi = async ()=>{
+    try {
+        const res = await myAxios.get(`/events/club/past-events`);
+        return res.data;       
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+
+export const createPollApi = async (values)=>{
+    try {
+        console.log(values);
+        const res = await myAxios.post(`/polls`,values);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+export const castVoteApi = async (pollId , eventName )=>{
+    try {
+        console.log("eventName: ",eventName);
+        const res = await myAxios.post(`/polls/${pollId}/vote`,eventName,{
+            headers: { "Content-Type": "application/text"   }, // 👈 Explicitly set JSON
+        });
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+export const deletePollApi = async ( pollId )=>{
+    try {
+        const res = await myAxios.delete(`/polls/${pollId}`);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        return error.response.data
+    }
+}
+
+export const editPollApi = async (values) =>{
+    try {
+        const res = await myAxios.patch("/polls",values)
         return res.data;
     } catch (error) {
         return error.response.data

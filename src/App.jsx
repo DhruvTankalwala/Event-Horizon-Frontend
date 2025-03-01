@@ -16,6 +16,7 @@ import ManageAttendancePage from './pages/ManageAttendancePage'
 import OngoingEventsPage from './pages/OngoingEventsPage'
 import EventAnalyticsPage from './pages/AnalyticsPage'
 import LogoutComponent from './components/Logout/LogoutComponent'
+import EventFeedbacksPage from './pages/EventFeedbacksPage'
 function App() {
   const navigate = useNavigate()
   useEffect(()=>{
@@ -108,6 +109,13 @@ function App() {
          element={
           <AuthRoute>
               <LogoutComponent />
+          </AuthRoute>
+          }/>
+          <Route
+         path='/feedbacks/event/:eventId'
+         element={
+          <AuthRoute>
+              <EventFeedbacksPage />
           </AuthRoute>
           }/>
     </Routes>

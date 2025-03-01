@@ -40,14 +40,19 @@ const validationSchema = Yup.object({
     speakers: [],
   }
 export function CreateEventForm({ onClose , event ,setEvents}) {
-
+  console.log(event);
+  
   const [imagePreview , setImagePreview] = useState(null);
+
+  // Reason is when we update the event for no speakers it returns null for the speaker which is set in the event when updated for the first time 
 
   const formik = useFormik({
     initialValues : event || initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
       console.log(values);
+
       let res;
       if(event!=null){
          res = await updateEventApi(values);
@@ -59,9 +64,20 @@ export function CreateEventForm({ onClose , event ,setEvents}) {
       if(res.statusCode >= 200 && res.statusCode < 300){
           toast.success(res.message)
           onClose();
-          setEvents((prevEvents)=>[...prevEvents , res.data])
+          if(!event){
+            setEvents((prevEvents)=>[...prevEvents , res.data])
+          }else{
+            setEvents(prevEvents=>prevEvents.map((prevEvent)=>{
+              if(prevEvent.id == event.id){
+                return res.data;
+              }else{
+                return prevEvent;
+              }
+            }))
+          }
+
           console.log("Events updated");
-          
+
       }else{
         toast.error(res.message)
       }
@@ -73,6 +89,7 @@ export function CreateEventForm({ onClose , event ,setEvents}) {
   const addSpeaker = () => {
     formik.setFieldValue("speakers", [...formik.values.speakers, { name: "", position: "", company: "" }]);
   };
+  
 
   const removeSpeaker = (index) => {
     const updatedSpeakers = formik.values.speakers.filter((_,i) => i !== index);
@@ -188,8 +205,8 @@ export function CreateEventForm({ onClose , event ,setEvents}) {
             placeholder="Total registrations"
             {...formik.getFieldProps("totalRegistrations")}
             className="w-full bg-gray-800 text-white"
-            error={formik.errors.title}
-            touched={formik.touched.title}
+            error={formik.errors.totalRegistrations}
+            touched={formik.touched.totalRegistrations}
           />
           <Input 
             name="location" 
@@ -203,12 +220,25 @@ export function CreateEventForm({ onClose , event ,setEvents}) {
             <label className="block text-sm font-medium text-gray-300 mb-1">Speakers</label>
             {formik.values.speakers?.map((speaker, index) => (
               <div key={index} className="flex gap-2 mb-2">
-                <Input placeholder="Name" error={formik.errors.speakers?.[index]?.name} touched={formik.touched.speakers?.[index]?.name} {...formik.getFieldProps(`speakers[${index}].name`)} className="flex-1 bg-gray-800 text-white" />
-                <Input placeholder="Position" error={formik.errors.speakers?.[index]?.position} touched={formik.touched.speakers?.[index]?.position} {...formik.getFieldProps(`speakers[${index}].position`)} {...formik.getFieldProps(`speakers[${index}].position`)} className="flex-1 bg-gray-800 text-white" />
-                <Input placeholder="Company" error={formik.errors.speakers?.[index]?.company} touched={formik.touched.speakers?.[index]?.company} {...formik.getFieldProps(`speakers[${index}].company`)} {...formik.getFieldProps(`speakers[${index}].company`)} className="flex-1 bg-gray-800 text-white" />
-                <button className="hover:cursor-pointer" type="button"  onClick={() => removeSpeaker(index)}>
+                <Input placeholder="Name" 
+                  error={formik.errors.speakers?.[index]?.name} 
+                  touched={formik.touched.speakers?.[index]?.name} 
+                  {...formik.getFieldProps(`speakers[${index}].name`)} 
+                  className="flex-1 bg-gray-800 text-white" />
+
+                <Input placeholder="Position" 
+                    error={formik.errors.speakers?.[index]?.position} 
+                    touched={formik.touched.speakers?.[index]?.position} 
+                    {...formik.getFieldProps(`speakers[${index}].position`)}  
+                    className="flex-1 bg-gray-800 text-white" />
+                <Input placeholder="Company" 
+                    error={formik.errors.speakers?.[index]?.company} 
+                    touched={formik.touched.speakers?.[index]?.company} 
+                    {...formik.getFieldProps(`speakers[${index}].company`)} 
+                    className="flex-1 bg-gray-800 text-white" />
+                <Button className="hover:cursor-pointer" type="button"  onClick={() => removeSpeaker(index)}>
                   <Trash size={20} />
-                </button>
+                </Button>
               </div>
             ))}
             <Button type="button" onClick={addSpeaker} variant = "secondary" className="px-4 py-3 text-lg  hover:cursor-pointer">

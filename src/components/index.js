@@ -10,7 +10,7 @@ import Polls from "./Polls/Polls";
 import { GradientBackground } from "./GradientBackground/GradientBackground";
 import ClubsComponent from "./Club/Clubs";
 import { Input } from "./Verification/Input";
-import { Button } from "./Verification/Button";
+import { Button } from "./Button";
 import { EventCard } from "./Event/components/EventCard";
 import EventsComponent from "./Event/Events";
 import AuthRoute from "../routes/ProtectedRoutes";
@@ -32,7 +32,8 @@ import ManageAttendanceComponent from "./ManageAttendanceComponent/ManageAttenda
 import PollsComponent from "./Polls/components/PollsComponent";
 import ProgressComponent from "./ProgessComponent";
 import AnalyticsComponent from "./AnalyticsComponent/AnalyticsComponent";
-import { FeedbackForm } from "./FeedbackForm";
+import { FeedbackForm } from "./Feedback/components/FeedbackForm";
+import FeedbacksComponent from "./Feedback/FeedbacksComponent";
 export {
     Navbar ,
     Footer ,
@@ -68,5 +69,6 @@ export {
     PollsComponent,
     ProgressComponent,
     AnalyticsComponent,
-    FeedbackForm
+    FeedbackForm,
+    FeedbacksComponent
 }

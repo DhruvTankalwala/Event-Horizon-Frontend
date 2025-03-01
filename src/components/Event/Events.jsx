@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Calendar, Clock, MapPin, Search ,Plus } from "lucide-react"
-import { Loader, GradientBackground, EventCard , Button} from "../index"
+import {  Search ,Plus } from "lucide-react"
+import { Loader, EventCard , Button} from "../index"
 import { getAllEvents } from "../../apiEndPoints"
 import toast from "react-hot-toast"
 import { EventRegistrationForm } from "./components/EventRegistrationForm"
@@ -12,7 +12,7 @@ import { CreateEventForm } from "./components/CreateEventForm"
 export default function EventsComponent() {
   const[loading,setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const [activeTab, setActiveTab] = useState("ONGOING")
+  const [activeTab, setActiveTab] = useState("UPCOMING")
   const [events, setEvents] = useState([])
   const [modifiedEvent , setModifiedEvent] = useState(false);
   const [isCreateFormOpen , setIsCreateFormOpen] = useState(null);

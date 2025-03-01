@@ -1,9 +1,13 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 const BASE_URL = 'http://localhost:8080/api/v1'
+const authToken = localStorage.getItem("authToken")
 export const myAxios = axios.create({
     baseURL : BASE_URL,
-    withCredentials: true
+    withCredentials: true,
+    headers:{
+        "Authorization" : authToken,
+    }
 })
 
 /*

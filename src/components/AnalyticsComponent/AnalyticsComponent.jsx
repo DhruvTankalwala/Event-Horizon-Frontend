@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ProgressComponent as Progress } from "../index";
+import { ProgressComponent as Progress , Loader } from "../index";
 import { Card, CardContent, CardHeader, CardTitle } from "../ChartComponent";
 import { Users, UserCheck, Calendar, Clock, MapPin, Star } from "lucide-react";
 import { Line } from "react-chartjs-2";
@@ -15,6 +15,8 @@ import {
   Legend,
 } from "chart.js";
 import EventAnalyticsCard from "./components/EventAnalysisCard";
+import { getAllClubsPastEventsApi } from "../../apiEndPoints";
+import toast from "react-hot-toast";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -154,27 +156,34 @@ const mockEvents = [
 
 export default function AnalyticsComponent() {
   const [events, setEvents] = useState([]);
-
+  const [isLoading , setIsLoading] = useState(true);
   useEffect(() => {
-    // Simulating API call to fetch events
-    setTimeout(() => {
-      setEvents(mockEvents);
-    }, 1000);
+    const fetchPastEvents = async()=>{
+      const res = await getAllClubsPastEventsApi();
+      if(res.statusCode == 200){
+        setEvents(res.data);
+        console.log(res.data);
+        setIsLoading(false);
+      }else{
+        toast.error(res.message)
+      }
+    }
+    fetchPastEvents()
   }, []);
 
   const chartData = {
-    labels: events.map((event) => event.name),
+    labels: events.map((event) => event.title),
     datasets: [
       {
         label: "Attended Students",
-        data: events.map((event) => event.attendedStudents),
+        data: events.map((event) => event.totalAttendance),
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
         fill: false,
       },
       {
         label: "Registered Students",
-        data: events.map((event) => event.registeredStudents),
+        data: events.map((event) => event.completedRegistrations),
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
         fill: false,
@@ -189,6 +198,10 @@ export default function AnalyticsComponent() {
       title: { display: true, text: "Event Attendance Overview" },
     },
   };
+
+  if(isLoading){
+    <Loader />
+  }
 
   return (
     <div className="min-h-screen text-white">
@@ -221,7 +234,7 @@ export default function AnalyticsComponent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <EventAnalyticsCard event={event} />
+              <EventAnalyticsCard key={event.id} event={event} />
             </motion.div>
           ))}
         </div>

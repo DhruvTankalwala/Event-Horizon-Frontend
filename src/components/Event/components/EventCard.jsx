@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { CalendarDays, Clock, MapPin, Users, Star, User, Edit, Trash2, CheckCheck } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreateEventForm } from "./CreateEventForm";
 import {Button, EventRegistrationForm, FeedbackForm} from "../../index"
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
@@ -10,6 +10,7 @@ export function EventCard({eventDetails , setEvents }) {
   const [selectedForm, setSelectedForm] = useState("");
   const userRole = localStorage.getItem("userRole")
   const userEmail = localStorage.getItem("email")
+  const navigate = useNavigate();
   const {
     id,
     title,
@@ -83,15 +84,25 @@ export function EventCard({eventDetails , setEvents }) {
           )}
         </div>
       </Link>
+      {/* Change */}
       {
         eventDetails.status == "PAST" && 
-        eventDetails.attended  ?
+        eventDetails.attended &&  
+          !eventDetails.feedbackGiven ? 
             <Button
                 onClick={() => setSelectedForm("feedback-form")}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white w-full"
+                className="flex-1 bg-purple-600 hover:bg-purple-700  text-white w-full"
               >
                 Give Feedback
               </Button> :
+              eventDetails.feedbackGiven ?
+              <Button
+                onClick={()=>navigate(`/feedbacks/event/${eventDetails.id}`)}
+                className="flex-1 bg-purple-600 hover:bg-purple-700  text-white w-full"
+              >
+                View Feedback
+              </Button>
+               : 
       // Can add view feedbacks 
         userRole == "CLUB_ADMIN" && userEmail == clubEmail ?
         <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between gap-2">
