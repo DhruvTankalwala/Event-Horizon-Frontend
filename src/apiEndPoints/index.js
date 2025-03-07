@@ -4,6 +4,8 @@ export const loginApi = async(values)=>{
         console.log("loginApi:",values);
         const res = await myAxios.post('/login',values);
         const token = res.headers['authorization'];
+        console.log(token);
+        
         if(res.data.statusCode==200 && token){
             localStorage.setItem("authToken",token)
             localStorage.setItem("email",values.email)
@@ -37,6 +39,7 @@ export const verifyEmailApi = async(token)=>{
             const res = await myAxios.post(`/verify`,{otp:token});
             if(res.data.statusCode==200 && token){
                 localStorage.setItem("authToken",token)
+                // Add the userRole and email
                 myAxios.defaults.headers.common['authorization'] = token;
             }
             console.log(res);
@@ -76,12 +79,21 @@ export const getAllEvents =  async()=>{
     }
 }
 
+export const authorizeAndAuthenticateApi = async(userAcceptedRole)=>{
+    try {
+        const res = await myAxios.get(`/verify/${userAcceptedRole}`);
+        console.log(res);
+        return res.data;
+    } catch (error) {
+        return error.response.data;
+    }
+}
+
 export const isAuthenticatedUser = async()=>{
     try {
         const res = await myAxios.get('/isAuthenticated');
         console.log(res);
         return res.data;
-        
     } catch (error) {
         return error.response.data;
     }

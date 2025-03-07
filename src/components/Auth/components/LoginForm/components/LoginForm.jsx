@@ -22,16 +22,16 @@ function LoginForm() {
       console.log(values);
       setIsLoading(true);
       const res = await loginApi(values);
-      setIsLoading(false);
       if(res.statusCode == 200){
         toast.success(res.message)
-        navigate('/clubs');
+        navigate('/');
       }else{
         console.log("Error");
         console.log(res.message);
         
         toast.error(res.message)
       }
+      setIsLoading(false);
       console.log('LoginForm:',res);
     },
   });

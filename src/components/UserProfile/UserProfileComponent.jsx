@@ -10,12 +10,13 @@ import toast from "react-hot-toast";
 import { editUserProfileApi, getUserProfileApi, updateImageUrlApi } from "../../apiEndPoints";
 
 export default function UserProfileComponent() {
-  const params = useParams();
-  const userId = params.userId;
+  const {userId} = useParams();
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading , setLoading] = useState(true)
-
+  const [error , setError] = useState(null)
+  console.log("User-Profile",userId);
+  
   useEffect(() => {
     const fetchUserProfile = async()=>{
         const res = await getUserProfileApi(userId);
@@ -58,21 +59,24 @@ export default function UserProfileComponent() {
   });
 
   const handleImageChange = async(e)=>{
+      setError(null)
     const file = e.currentTarget.files[0];
-    console.log(file);  
+    console.log(file);
     
     if(file){
-        console.log(URL.createObjectURL(file));
-        document.getElementById("user-image").setAttribute("src",URL.createObjectURL(file))
-        const res = await updateImageUrlApi(file);
-        console.log(res);
-        if(res.statusCode == 200){
-            toast.success(res.message)
+        if(file.size > 2 * 1024 * 1024){
+            setError("Image size should be lesser than 2MB")
         }else{
-            toast.error("Error updating image")
-        }
-    }else{
-        toast.error("Cant upload image")
+            console.log(URL.createObjectURL(file));
+            document.getElementById("user-image").setAttribute("src",URL.createObjectURL(file))
+            const res = await updateImageUrlApi(file);
+            console.log(res);
+            if(res.statusCode == 200){
+                toast.success(res.message)
+            }else{
+                toast.error("Error updating image")
+            }
+        } 
     }
   }
 
@@ -104,21 +108,24 @@ export default function UserProfileComponent() {
                     alt={user.name}
                     className="w-32 h-32 rounded-full object-cover"
                 />
-                {isEditing && (<><label
-                    htmlFor="image-upload"
-                    className="absolute -bottom-3 right-0 cursor-pointer"
-                >
-                    <div className="rounded-full bg-purple-600 p-2 hover:bg-purple-700 transition-colors duration-300">
-                    <Pencil className="h-4 w-4 text-white" />
-                    </div>
-                </label>
-                <input
-                    id="image-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                />
+                {isEditing && (
+                    <>
+                        <label
+                        htmlFor="image-upload"
+                        className="absolute -bottom-3 right-0 cursor-pointer"
+                    >
+                        <div className="rounded-full bg-purple-600 p-2 hover:bg-purple-700 transition-colors duration-300">
+                        <Pencil className="h-4 w-4 text-white" />
+                        </div>
+                    </label>
+                    <input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageChange}
+                    />
+                    {error && <p className="text-red-600" >{error}</p>}
                 </>
                 )}
                 </div>

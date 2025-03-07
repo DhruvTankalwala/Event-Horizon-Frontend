@@ -2,11 +2,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 const BASE_URL = 'http://localhost:8080/api/v1'
 const authToken = localStorage.getItem("authToken")
+console.log("AuthToken",authToken);
+
 export const myAxios = axios.create({
     baseURL : BASE_URL,
     withCredentials: true,
     headers:{
-        "Authorization" : authToken,
+        "authorization" : authToken,
     }
 })
 
@@ -57,7 +59,7 @@ myAxios.interceptors.response.use(
             
             console.log("Inceptor:",message)
             localStorage.removeItem("authToken")
-            delete myAxios.defaults.headers.common["Authorization"];
+            delete myAxios.defaults.headers.common["authorization"];
             console.log("Token removed");
             console.log(localStorage.getItem("authToken"));
             

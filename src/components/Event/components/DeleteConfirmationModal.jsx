@@ -19,7 +19,7 @@ export function DeleteConfirmationModal({  onClose ,eventId , clubId ,setEvents 
       toast.success(res.message)
       if(clubId){
         localStorage.removeItem("authToken")
-        delete myAxios.defaults.headers.common["Authorization"];
+        delete myAxios.defaults.headers.common["authorization"];
         navigate("/auth")
       }else{
         setEvents((prevEvents)=>prevEvents.filter(prevEvent=>prevEvent.id != eventId ))

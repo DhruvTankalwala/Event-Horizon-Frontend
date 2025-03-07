@@ -1,34 +1,37 @@
 import React,{useEffect , useState} from 'react'
-import { isAuthenticatedUser } from '../apiEndPoints'
+import { Outlet } from 'react-router-dom';
+import { isAuthenticatedUser , authorizeAndAuthenticateApi } from '../apiEndPoints'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '../components';
-import { myAxios } from '../utils/user-service';
-function AuthRouter({children}){
+import LogoutComponent from '../components/Logout/LogoutComponent';
+function ProtectedRoutes({children , userTypeAccepted}){
   const [authentication, setAuthentication] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
   const navigate = useNavigate();
   useEffect(()=>{
+    console.log(token);
+    
     const getUser = async()=>{
       console.log("Inside the useEffect of authrouter");
-      const token = localStorage.getItem("authToken");
-          if(!token){
+        if(!token){
             navigate("/auth")
           }
-          myAxios.defaults.headers.common['authorization'] = token;
-          console.log(token);
-          const res = await isAuthenticatedUser();
-          console.log(res.data);
-      
+          console.log("Protected Routes",token);
+          const res = await authorizeAndAuthenticateApi(userTypeAccepted);
+          console.log(res);
       if(res.statusCode == 200){
           setAuthentication(true)
       }else{
-        navigate('/auth');
-      }
+        console.log("Authorization error");
+        setAuthentication(false)
+        }
     }
     getUser();
-  },[navigate])
+  },[])
   if(authentication == null){
     return <Loader /> 
   }
-  return authentication? children : null;
+   
+  return authentication? <Outlet /> : <LogoutComponent />;
 }
-export default AuthRouter
+export default ProtectedRoutes

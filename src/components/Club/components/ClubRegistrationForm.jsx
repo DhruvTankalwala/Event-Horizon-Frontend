@@ -58,7 +58,7 @@ const ClubRegistrationForm = ({onClose , club }) => {
     const file = e.currentTarget.files[0];
     if(file){
       formik.setFieldValue("icon", file);
-      setIconPreview(URL.createObjectURL(file))
+      setIconPreview(URL.createObjectURL(file))   
     }else{
       setIconPreview(null)
     }

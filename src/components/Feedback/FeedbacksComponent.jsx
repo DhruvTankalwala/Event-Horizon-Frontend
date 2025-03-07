@@ -102,8 +102,9 @@ export default function FeedbacksComponent() {
               {filteredFeedbacks.map((feedback) => (
                 <FeedbackItem
                   key={feedback.id}
-                  userImage={feedback.userImage}
-                  userName={feedback.userName}
+                  userId={feedback.userId}
+                  userImage={feedback.imageUrl}
+                  userName={feedback.username}
                   feedback={feedback.feedback}
                   rating={feedback.rating}
                 />

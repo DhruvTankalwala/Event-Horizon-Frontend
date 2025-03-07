@@ -146,7 +146,7 @@ export function EventCard({eventDetails , setEvents }) {
         </Button>}  
       </div>
     }
-          { selectedForm == "feedback-form" && <FeedbackForm  eventId={eventDetails.id} onClose={()=>setSelectedForm(null)} eventName={eventDetails.title} /> }
+          {selectedForm == "feedback-form" && <FeedbackForm  eventId={eventDetails.id} onClose={()=>setSelectedForm(null)} eventName={eventDetails.title} /> }
           {selectedForm =="edit" && <CreateEventForm event={eventDetails} onClose={()=>setSelectedForm("")} setEvents={setEvents}  /> }
           {selectedForm =="delete" && <DeleteConfirmationModal eventId={id}  onClose={()=>setSelectedForm("")} setEvents={setEvents} /> }
           {selectedForm =="register-for-event" && <EventRegistrationForm eventId={id} eventName={title} onClose={()=>setSelectedForm("")  } /> }
